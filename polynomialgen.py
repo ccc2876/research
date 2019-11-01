@@ -1,48 +1,67 @@
 import random
 from sys import maxsize
+"""
+generates polynomials to be used to share secrets from a smart meter to the aggregator 
+@author Claire Casalnova
+
+add the number
+
+"""
 
 
-"""x4 x3 x2 x1 secet """
+def create_poly(bin_string,secret,degree):
+    power=degree
+    polystring=""
 
-def create_poly(vars,secret):
-    print(vars)
-    poly=""
-    for i in range(0,len(vars)-1):
-        if vars.pop(i)==1:
-            coeff=random.randint(1,maxsize)
-            poly+=str(coeff)+"x" + "+"
+    #loop over the binary string and generate the coefficients
+    for i in range(0, len(bin_string)):
+        if bin_string[i]==1:
+            coeff=random.randint(0,maxsize)
+            polystring+=str(coeff) + "x^" + str(power) + "+"
 
+        power-=1
 
-    poly+=str(secret)
-    print(poly)
+    #add the secret to the end of the polynomial as the constant
+    polystring+=str(secret)
+    print(polystring)
 
-def get_info(agg,sm,secret):
-    deg_max=agg-1
-    degree=random.randint(1,deg_max)
+def get_info(degree,secret):
+    #create a string of binary numbers for the x values
+    bin_string=[1]
 
-    bin_string=[]
-
-    for i in range(0,degree):
+    #loop over the range of the degree to generate whether the power of x will be present
+    for i in range(1,degree):
         bit=random.randint(0,1)
         bin_string.append(bit)
 
 
-    create_poly(bin_string,secret)
+
+    create_poly(bin_string,secret,degree)
 
 def get_inputs():
-    aggregators = int(input("How many aggregators?"))
+
+    #ask for number of aggregators
+    aggregators = int(input("How many aggregators? "))
     while aggregators<1:
-        aggregators = int(input("How many aggregators?"))
+        aggregators = int(input("How many aggregators? "))
 
-    sm=int(input("How many smart meters?"))
+    #calculate degree
+    deg_max = aggregators - 1
+    degree = random.randint(int(deg_max/2), deg_max)
+
+
+    #ask for number of smart meters
+    sm=int(input("How many smart meters? "))
     while sm < 1:
-        sm = int(input("How many smart meters?"))
+        sm = int(input("How many smart meters? "))
 
-    secret=int(input("What is the secret?"))
-    while secret < 1:
-        secret=int(input("What is the secret?"))
+    #ask for the secret for each of the smart meters
+    for i in range(1, sm+1):
+        secret=int(input("What is the secret for Smart Meter #" + str(i) + "? "))
+        while secret < 1:
+            secret=int(input("What is the secret for Smart Meter #" + str(i) + "? "))
 
-    get_info(aggregators,sm,secret)
+        get_info(degree,secret)
 
 def main():
     get_inputs()
