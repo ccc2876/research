@@ -46,8 +46,8 @@ def get_inputs():
         aggregators = int(input("How many aggregators? "))
 
     #calculate degree
-    deg_max = aggregators - 1
-    degree = random.randint(int(deg_max/2), deg_max)
+    degree = aggregators - 1
+   # degree = random.randint(int(deg_max/2), deg_max)
 
 
     #ask for number of smart meters
