@@ -2,7 +2,6 @@ import random
 from sys import maxsize
 
 
-
 class Aggregator:
     def __init__(self, ID):
         self.ID=ID
