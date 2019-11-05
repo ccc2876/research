@@ -9,34 +9,9 @@ add the number
 """
 
 
-def create_poly(bin_string,secret,degree):
-    power=degree
-    polystring=""
-
-    #loop over the binary string and generate the coefficients
-    for i in range(0, len(bin_string)):
-        if bin_string[i]==1:
-            coeff=random.randint(0,maxsize)
-            polystring+=str(coeff) + "x^" + str(power) + "+"
-
-        power-=1
-
-    #add the secret to the end of the polynomial as the constant
-    polystring+=str(secret)
-    print(polystring)
-
-def get_info(degree,secret):
-    #create a string of binary numbers for the x values
-    bin_string=[1]
-
-    #loop over the range of the degree to generate whether the power of x will be present
-    for i in range(1,degree):
-        bit=random.randint(0,1)
-        bin_string.append(bit)
 
 
 
-    create_poly(bin_string,secret,degree)
 
 def get_inputs():
 
