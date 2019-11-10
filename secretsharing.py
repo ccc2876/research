@@ -1,5 +1,8 @@
 import random
 from sys import maxsize
+import copy
+
+
 
 
 class Aggregator:
@@ -8,6 +11,7 @@ class Aggregator:
         self.shares_list=[]
         self.running_total=0
         self.current_total=0
+        self.delta_func=""
 
     def get_ID(self):
         return self.ID
@@ -16,8 +20,11 @@ class Aggregator:
         shares=""
         for s in self.shares_list:
             shares+=str(s)
-            shares+=", "
+            shares+=" "
         return shares
+
+    def make_delta(self, delta):
+        self.delta_func=delta
 
 
 
@@ -37,7 +44,6 @@ class SmartMeter:
     def create_poly(self):
         # create a string of binary numbers for the x values
         bin_string = [1]
-
 
         # loop over the range of the degree to generate whether the power of x will be present
         for i in range(1, self.degree):
@@ -67,11 +73,7 @@ class SmartMeter:
         value=0
 
         for i in range(0,length):
-            if i!=0:
-                value+=self.coeff_list[i]* (agg.get_ID()**power)
-                print ("agg** power" , agg.get_ID() ** power)
-                print("power", power)
-                print("coeff", self.coeff_list[i])
+            value+=self.coeff_list[i]* (agg.get_ID()**power)
             power-=1
 
         agg.shares_list.append(value)
@@ -137,4 +139,23 @@ def main():
 
     for a in aggregator_list:
         print("Shares list for aggregator #" + str(a.get_ID()) + ": " + a.print_shares_list())
+
+
+
+
+    agg_list2= copy.deepcopy(aggregator_list)
+
+    for i in range(0,len(agg_list2)):
+        a = agg_list2.pop(0)
+        top=""
+        bottom=1
+
+        for a2 in agg_list2:
+            top += "(x - " + str(a2.get_ID()) + ")"
+            bottom *= (a.get_ID() - a2.get_ID())
+            a.make_delta(top+ "/" + str(bottom))
+            print(a.get_ID() ," " , top , bottom)
+
+        agg_list2.append(a)
+
 main()
