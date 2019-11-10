@@ -71,7 +71,7 @@ class SmartMeter:
         for i in range(0, length):
             value += self.coeff_list[i] * (agg.get_ID() ** power)
             power -= 1
-        value+=self.secret
+        value += self.secret
         agg.shares_list.append(value)
 
     def get_poly(self):
@@ -101,15 +101,11 @@ def main():
     aggregators = get_aggs()
     degree = aggregators - 1
 
-
-
     for i in range(1, aggregators + 1):
         a = Aggregator(i)
         aggregator_list.append(a)
 
     sm_num = get_smart_meters()
-
-
 
     for i in range(1, sm_num + 1):
         secret = int(input("What is the secret for Smart Meter #" + str(i) + "? "))
@@ -128,7 +124,7 @@ def main():
             sm.create_shares(agg)
     end = time.time()
     print()
-    print("Time Elapsed: ", end-start)
+    print("Time Elapsed: ", end - start)
 
     for sm in smart_meter_list:
         print("Polynomial for Smart Meter #" + str(sm.get_ID()) + ": " + sm.get_poly())
