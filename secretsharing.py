@@ -50,18 +50,14 @@ class Aggregator:
         """
         calculates the current and running totals of the shares
         """
+
         self.running_total = sum(self.shares_list)
         self.current_total = self.running_total - self.current_total
 
 
 class SmartMeter:
     """
-    attributes for Smart Meter class
-    ID -- the ID that corresponds to each smart meter
-    degree -- the number of aggregators -1, corresponds to degree of polynomial
-    secret -- the secret that the smart meter has, updated at each time instance
-    polynomial -- the randomly generated polynomial for creating shares
-    coeff_list -- the randomly generated coefficients  used to create the polynomial
+
     """
     def __init__(self, degree, ID):
         self.ID = ID
@@ -100,7 +96,7 @@ class SmartMeter:
         # loop over the binary string and generate the coefficients
         for i in range(0, len(bin_string)):
             if bin_string[i] == 1:
-                coeff = random.randint(0, maxsize)
+                coeff = random.randint(1, 10)
                 polystring += str(coeff) + "x^" + str(power) + "+"
                 self.coeff_list.append(coeff)
             else:
@@ -231,5 +227,9 @@ def main():
             agg_list2.append(a)
         print()
 
+"""
+2 lists in the aggregator 
+1 counter in the smart meter 
+"""
 
 main()
