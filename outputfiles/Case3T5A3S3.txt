@@ -1,0 +1,160 @@
+Time instance 0
+
+Secret for Smart Meter #0: 4
+Secret for Smart Meter #1: 3
+Secret for Smart Meter #2: 2
+Elapsed time: 4.792213439941406e-05
+
+Polynomial for Smart Meter #1: 5x^2+8x^1+4
+Shares for Smart Meter #1: [17, 40, 73]
+
+Polynomial for Smart Meter #2: 6x^2+1x^1+3
+Shares for Smart Meter #2: [10, 29, 60]
+
+Polynomial for Smart Meter #3: 9x^2+1x^1+2
+Shares for Smart Meter #3: [12, 40, 86]
+
+Shares list for aggregator #1: 17 10 12 
+Total of Aggregator #1: 39
+Current total of Aggregator #1: 39
+
+Shares list for aggregator #2: 40 29 40 
+Total of Aggregator #2: 109
+Current total of Aggregator #2: 109
+
+Shares list for aggregator #3: 73 60 86 
+Total of Aggregator #3: 219
+Current total of Aggregator #3: 219
+
+9.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 3
+Secret for Smart Meter #1: 4
+Secret for Smart Meter #2: 1
+Elapsed time: 4.6253204345703125e-05
+
+Polynomial for Smart Meter #1: 6x^2+3x^1+3
+Shares for Smart Meter #1: [17, 40, 73, 12, 33, 66]
+
+Polynomial for Smart Meter #2: 3x^2+6x^1+4
+Shares for Smart Meter #2: [10, 29, 60, 13, 28, 49]
+
+Polynomial for Smart Meter #3: 6x^2+1
+Shares for Smart Meter #3: [12, 40, 86, 7, 25, 55]
+
+Shares list for aggregator #1: 29 23 19 
+Total of Aggregator #1: 71
+Current total of Aggregator #1: 32
+
+Shares list for aggregator #2: 73 57 65 
+Total of Aggregator #2: 195
+Current total of Aggregator #2: 86
+
+Shares list for aggregator #3: 139 109 141 
+Total of Aggregator #3: 389
+Current total of Aggregator #3: 170
+
+9.0
+8.0
+
+Time instance 2
+
+Secret for Smart Meter #0: 2
+Secret for Smart Meter #1: 4
+Secret for Smart Meter #2: 1
+Elapsed time: 4.57763671875e-05
+
+Polynomial for Smart Meter #1: 8x^2+2
+Shares for Smart Meter #1: [17, 40, 73, 12, 33, 66, 10, 34, 74]
+
+Polynomial for Smart Meter #2: 6x^2+4
+Shares for Smart Meter #2: [10, 29, 60, 13, 28, 49, 10, 28, 58]
+
+Polynomial for Smart Meter #3: 9x^2+3x^1+1
+Shares for Smart Meter #3: [12, 40, 86, 7, 25, 55, 13, 43, 91]
+
+Shares list for aggregator #1: 39 33 32 
+Total of Aggregator #1: 104
+Current total of Aggregator #1: 33
+
+Shares list for aggregator #2: 107 85 108 
+Total of Aggregator #2: 300
+Current total of Aggregator #2: 105
+
+Shares list for aggregator #3: 213 167 232 
+Total of Aggregator #3: 612
+Current total of Aggregator #3: 223
+
+9.0
+8.0
+7.0
+
+Time instance 3
+
+Secret for Smart Meter #0: 5
+Secret for Smart Meter #1: 3
+Secret for Smart Meter #2: 1
+Elapsed time: 4.1961669921875e-05
+
+Polynomial for Smart Meter #1: 7x^2+5
+Shares for Smart Meter #1: [17, 40, 73, 12, 33, 66, 10, 34, 74, 12, 33, 68]
+
+Polynomial for Smart Meter #2: 5x^2+3
+Shares for Smart Meter #2: [10, 29, 60, 13, 28, 49, 10, 28, 58, 8, 23, 48]
+
+Polynomial for Smart Meter #3: 9x^2+6x^1+1
+Shares for Smart Meter #3: [12, 40, 86, 7, 25, 55, 13, 43, 91, 16, 49, 100]
+
+Shares list for aggregator #1: 51 41 48 
+Total of Aggregator #1: 140
+Current total of Aggregator #1: 36
+
+Shares list for aggregator #2: 140 108 157 
+Total of Aggregator #2: 405
+Current total of Aggregator #2: 105
+
+Shares list for aggregator #3: 281 215 332 
+Total of Aggregator #3: 828
+Current total of Aggregator #3: 216
+
+9.0
+8.0
+7.0
+9.0
+
+Time instance 4
+
+Secret for Smart Meter #0: 5
+Secret for Smart Meter #1: 1
+Secret for Smart Meter #2: 5
+Elapsed time: 4.7206878662109375e-05
+
+Polynomial for Smart Meter #1: 6x^2+5
+Shares for Smart Meter #1: [17, 40, 73, 12, 33, 66, 10, 34, 74, 12, 33, 68, 11, 29, 59]
+
+Polynomial for Smart Meter #2: 10x^2+1
+Shares for Smart Meter #2: [10, 29, 60, 13, 28, 49, 10, 28, 58, 8, 23, 48, 11, 41, 91]
+
+Polynomial for Smart Meter #3: 3x^2+1x^1+5
+Shares for Smart Meter #3: [12, 40, 86, 7, 25, 55, 13, 43, 91, 16, 49, 100, 9, 19, 35]
+
+Shares list for aggregator #1: 62 52 57 
+Total of Aggregator #1: 171
+Current total of Aggregator #1: 31
+
+Shares list for aggregator #2: 169 149 176 
+Total of Aggregator #2: 494
+Current total of Aggregator #2: 89
+
+Shares list for aggregator #3: 340 306 367 
+Total of Aggregator #3: 1013
+Current total of Aggregator #3: 185
+
+9.0
+8.0
+7.0
+9.0
+11.0
+
