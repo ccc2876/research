@@ -218,8 +218,11 @@ def main():
         time_instances = int(line[0])
         aggregators = int(line[1])
         sm_num = int(line[2])
+        if time_instances < 1 or aggregators < 1 or sm_num <1:
+            print("invalid input file, please retry")
+            exit(1)
 
-    out = open("Case1" + "T" + str(time_instances) + "A" + str(aggregators) + "S" + str(sm_num) + ".txt", "w")
+    out = open("outputfiles/Case3" + "T" + str(time_instances) + "A" + str(aggregators) + "S" + str(sm_num) + ".txt", "w")
 
     aggregator_list = []
     smart_meter_list = []
