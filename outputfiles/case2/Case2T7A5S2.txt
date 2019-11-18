@@ -1,0 +1,259 @@
+Time instance 0
+
+Secret for Smart Meter #0: 2
+Secret for Smart Meter #1: 4
+Elapsed time: 8.130073547363281e-05
+
+Polynomial for Smart Meter #1: 4x^4+9x^1+2
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547]
+
+Polynomial for Smart Meter #2: 3x^4+1x^2+4
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904]
+
+Shares list for aggregator #1: 15 8 
+Total of Aggregator #1: 23
+Current total of Aggregator #1: 23
+
+Shares list for aggregator #2: 84 56 
+Total of Aggregator #2: 140
+Current total of Aggregator #2: 140
+
+Shares list for aggregator #3: 353 256 
+Total of Aggregator #3: 609
+Current total of Aggregator #3: 609
+
+Shares list for aggregator #4: 1062 788 
+Total of Aggregator #4: 1850
+Current total of Aggregator #4: 1850
+
+Shares list for aggregator #5: 2547 1904 
+Total of Aggregator #5: 4451
+Current total of Aggregator #5: 4451
+
+6.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 3
+Secret for Smart Meter #1: 3
+Elapsed time: 8.535385131835938e-05
+
+Polynomial for Smart Meter #1: 3x^4+2x^2+3
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547, 8, 59, 264, 803, 1928]
+
+Polynomial for Smart Meter #2: 10x^4+6x^3+5x^1+3
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904, 24, 221, 990, 2967, 7028]
+
+Shares list for aggregator #1: 23 32 
+Total of Aggregator #1: 55
+Current total of Aggregator #1: 32
+
+Shares list for aggregator #2: 143 277 
+Total of Aggregator #2: 420
+Current total of Aggregator #2: 280
+
+Shares list for aggregator #3: 617 1246 
+Total of Aggregator #3: 1863
+Current total of Aggregator #3: 1254
+
+Shares list for aggregator #4: 1865 3755 
+Total of Aggregator #4: 5620
+Current total of Aggregator #4: 3770
+
+Shares list for aggregator #5: 4475 8932 
+Total of Aggregator #5: 13407
+Current total of Aggregator #5: 8956
+
+6.0
+6.0
+
+Time instance 2
+
+Secret for Smart Meter #0: 1
+Secret for Smart Meter #1: 1
+Elapsed time: 7.486343383789062e-05
+
+Polynomial for Smart Meter #1: 4x^4+3x^3+3x^2+9x^1+1
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547, 8, 59, 264, 803, 1928, 20, 119, 460, 1301, 2996]
+
+Polynomial for Smart Meter #2: 10x^4+4x^3+1
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904, 24, 221, 990, 2967, 7028, 15, 193, 919, 2817, 6751]
+
+Shares list for aggregator #1: 43 47 
+Total of Aggregator #1: 90
+Current total of Aggregator #1: 35
+
+Shares list for aggregator #2: 262 470 
+Total of Aggregator #2: 732
+Current total of Aggregator #2: 312
+
+Shares list for aggregator #3: 1077 2165 
+Total of Aggregator #3: 3242
+Current total of Aggregator #3: 1379
+
+Shares list for aggregator #4: 3166 6572 
+Total of Aggregator #4: 9738
+Current total of Aggregator #4: 4118
+
+Shares list for aggregator #5: 7471 15683 
+Total of Aggregator #5: 23154
+Current total of Aggregator #5: 9747
+
+6.0
+6.0
+2.0
+
+Time instance 3
+
+Secret for Smart Meter #0: 2
+Secret for Smart Meter #1: 3
+Elapsed time: 0.00011396408081054688
+
+Polynomial for Smart Meter #1: 3x^4+5x^3+2
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547, 8, 59, 264, 803, 1928, 20, 119, 460, 1301, 2996, 10, 90, 380, 1090, 2502]
+
+Polynomial for Smart Meter #2: 5x^4+4x^1+3
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904, 24, 221, 990, 2967, 7028, 15, 193, 919, 2817, 6751, 12, 91, 420, 1299, 3148]
+
+Shares list for aggregator #1: 53 59 
+Total of Aggregator #1: 112
+Current total of Aggregator #1: 22
+
+Shares list for aggregator #2: 352 561 
+Total of Aggregator #2: 913
+Current total of Aggregator #2: 181
+
+Shares list for aggregator #3: 1457 2585 
+Total of Aggregator #3: 4042
+Current total of Aggregator #3: 800
+
+Shares list for aggregator #4: 4256 7871 
+Total of Aggregator #4: 12127
+Current total of Aggregator #4: 2389
+
+Shares list for aggregator #5: 9973 18831 
+Total of Aggregator #5: 28804
+Current total of Aggregator #5: 5650
+
+6.0
+6.0
+2.0
+5.0
+
+Time instance 4
+
+Secret for Smart Meter #0: 5
+Secret for Smart Meter #1: 4
+Elapsed time: 0.0002090930938720703
+
+Polynomial for Smart Meter #1: 6x^4+3x^2+5
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547, 8, 59, 264, 803, 1928, 20, 119, 460, 1301, 2996, 10, 90, 380, 1090, 2502, 14, 113, 518, 1589, 3830]
+
+Polynomial for Smart Meter #2: 4x^4+8x^1+4
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904, 24, 221, 990, 2967, 7028, 15, 193, 919, 2817, 6751, 12, 91, 420, 1299, 3148, 16, 84, 352, 1060, 2544]
+
+Shares list for aggregator #1: 67 75 
+Total of Aggregator #1: 142
+Current total of Aggregator #1: 30
+
+Shares list for aggregator #2: 465 645 
+Total of Aggregator #2: 1110
+Current total of Aggregator #2: 197
+
+Shares list for aggregator #3: 1975 2937 
+Total of Aggregator #3: 4912
+Current total of Aggregator #3: 870
+
+Shares list for aggregator #4: 5845 8931 
+Total of Aggregator #4: 14776
+Current total of Aggregator #4: 2649
+
+Shares list for aggregator #5: 13803 21375 
+Total of Aggregator #5: 35178
+Current total of Aggregator #5: 6374
+
+6.0
+6.0
+2.0
+5.0
+9.0
+
+Time instance 5
+
+Secret for Smart Meter #0: 3
+Secret for Smart Meter #1: 1
+Elapsed time: 0.00011396408081054688
+
+Polynomial for Smart Meter #1: 5x^4+8x^2+3
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547, 8, 59, 264, 803, 1928, 20, 119, 460, 1301, 2996, 10, 90, 380, 1090, 2502, 14, 113, 518, 1589, 3830, 16, 115, 480, 1411, 3328]
+
+Polynomial for Smart Meter #2: 8x^4+4x^3+1
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904, 24, 221, 990, 2967, 7028, 15, 193, 919, 2817, 6751, 12, 91, 420, 1299, 3148, 16, 84, 352, 1060, 2544, 13, 161, 757, 2305, 5501]
+
+Shares list for aggregator #1: 83 88 
+Total of Aggregator #1: 171
+Current total of Aggregator #1: 29
+
+Shares list for aggregator #2: 580 806 
+Total of Aggregator #2: 1386
+Current total of Aggregator #2: 276
+
+Shares list for aggregator #3: 2455 3694 
+Total of Aggregator #3: 6149
+Current total of Aggregator #3: 1237
+
+Shares list for aggregator #4: 7256 11236 
+Total of Aggregator #4: 18492
+Current total of Aggregator #4: 3716
+
+Shares list for aggregator #5: 17131 26876 
+Total of Aggregator #5: 44007
+Current total of Aggregator #5: 8829
+
+6.0
+6.0
+2.0
+5.0
+9.0
+4.0
+
+Time instance 6
+
+Secret for Smart Meter #0: 2
+Secret for Smart Meter #1: 4
+Elapsed time: 4.100799560546875e-05
+
+Polynomial for Smart Meter #1: 10x^4+2
+Shares for Smart Meter #1: [15, 84, 353, 1062, 2547, 8, 59, 264, 803, 1928, 20, 119, 460, 1301, 2996, 10, 90, 380, 1090, 2502, 14, 113, 518, 1589, 3830, 16, 115, 480, 1411, 3328, 12, 162, 812, 2562, 6252]
+
+Polynomial for Smart Meter #2: 1x^4+8x^3+4
+Shares for Smart Meter #2: [8, 56, 256, 788, 1904, 24, 221, 990, 2967, 7028, 15, 193, 919, 2817, 6751, 12, 91, 420, 1299, 3148, 16, 84, 352, 1060, 2544, 13, 161, 757, 2305, 5501, 13, 84, 301, 772, 1629]
+
+Shares list for aggregator #1: 95 101 
+Total of Aggregator #1: 196
+Current total of Aggregator #1: 25
+
+Shares list for aggregator #2: 742 890 
+Total of Aggregator #2: 1632
+Current total of Aggregator #2: 246
+
+Shares list for aggregator #3: 3267 3995 
+Total of Aggregator #3: 7262
+Current total of Aggregator #3: 1113
+
+Shares list for aggregator #4: 9818 12008 
+Total of Aggregator #4: 21826
+Current total of Aggregator #4: 3334
+
+Shares list for aggregator #5: 23383 28505 
+Total of Aggregator #5: 51888
+Current total of Aggregator #5: 7881
+
+6.0
+6.0
+2.0
+5.0
+9.0
+4.0
+6.0
+

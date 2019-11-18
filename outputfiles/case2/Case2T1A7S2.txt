@@ -1,0 +1,42 @@
+Time instance 0
+
+Secret for Smart Meter #0: 5
+Secret for Smart Meter #1: 2
+Elapsed time: 0.00018310546875
+
+Polynomial for Smart Meter #1: 1x^6+1x^1+5
+Shares for Smart Meter #1: [7, 71, 737, 4105, 15635, 46667, 117661]
+
+Polynomial for Smart Meter #2: 2x^6+1x^5+10x^4+7x^1+2
+Shares for Smart Meter #2: [22, 336, 2534, 11806, 40662, 114092, 276166]
+
+Shares list for aggregator #1: 7 22 
+Total of Aggregator #1: 29
+Current total of Aggregator #1: 29
+
+Shares list for aggregator #2: 71 336 
+Total of Aggregator #2: 407
+Current total of Aggregator #2: 407
+
+Shares list for aggregator #3: 737 2534 
+Total of Aggregator #3: 3271
+Current total of Aggregator #3: 3271
+
+Shares list for aggregator #4: 4105 11806 
+Total of Aggregator #4: 15911
+Current total of Aggregator #4: 15911
+
+Shares list for aggregator #5: 15635 40662 
+Total of Aggregator #5: 56297
+Current total of Aggregator #5: 56297
+
+Shares list for aggregator #6: 46667 114092 
+Total of Aggregator #6: 160759
+Current total of Aggregator #6: 160759
+
+Shares list for aggregator #7: 117661 276166 
+Total of Aggregator #7: 393827
+Current total of Aggregator #7: 393827
+
+7.0
+

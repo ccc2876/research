@@ -1,0 +1,180 @@
+Time instance 0
+
+Secret for Smart Meter #0: 1
+Elapsed time: 3.504753112792969e-05
+
+Polynomial for Smart Meter #1: 6x^5+8x^4+1
+Shares for Smart Meter #1: [15, 321, 2107, 8193, 23751, 57025]
+
+Shares list for aggregator #1: 15 
+Total of Aggregator #1: 15
+Current total of Aggregator #1: 15
+
+Shares list for aggregator #2: 321 
+Total of Aggregator #2: 321
+Current total of Aggregator #2: 321
+
+Shares list for aggregator #3: 2107 
+Total of Aggregator #3: 2107
+Current total of Aggregator #3: 2107
+
+Shares list for aggregator #4: 8193 
+Total of Aggregator #4: 8193
+Current total of Aggregator #4: 8193
+
+Shares list for aggregator #5: 23751 
+Total of Aggregator #5: 23751
+Current total of Aggregator #5: 23751
+
+Shares list for aggregator #6: 57025 
+Total of Aggregator #6: 57025
+Current total of Aggregator #6: 57025
+
+1.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 1
+Elapsed time: 3.314018249511719e-05
+
+Polynomial for Smart Meter #1: 6x^5+2x^3+2x^2+1
+Shares for Smart Meter #1: [15, 321, 2107, 8193, 23751, 57025, 11, 217, 1531, 6305, 19051, 47161]
+
+Shares list for aggregator #1: 26 
+Total of Aggregator #1: 26
+Current total of Aggregator #1: 11
+
+Shares list for aggregator #2: 538 
+Total of Aggregator #2: 538
+Current total of Aggregator #2: 217
+
+Shares list for aggregator #3: 3638 
+Total of Aggregator #3: 3638
+Current total of Aggregator #3: 1531
+
+Shares list for aggregator #4: 14498 
+Total of Aggregator #4: 14498
+Current total of Aggregator #4: 6305
+
+Shares list for aggregator #5: 42802 
+Total of Aggregator #5: 42802
+Current total of Aggregator #5: 19051
+
+Shares list for aggregator #6: 104186 
+Total of Aggregator #6: 104186
+Current total of Aggregator #6: 47161
+
+1.0
+1.0
+
+Time instance 2
+
+Secret for Smart Meter #0: 1
+Elapsed time: 3.0994415283203125e-05
+
+Polynomial for Smart Meter #1: 4x^5+9x^4+5x^3+8x^1+1
+Shares for Smart Meter #1: [15, 321, 2107, 8193, 23751, 57025, 11, 217, 1531, 6305, 19051, 47161, 27, 329, 1861, 6753, 18791, 43897]
+
+Shares list for aggregator #1: 53 
+Total of Aggregator #1: 53
+Current total of Aggregator #1: 27
+
+Shares list for aggregator #2: 867 
+Total of Aggregator #2: 867
+Current total of Aggregator #2: 329
+
+Shares list for aggregator #3: 5499 
+Total of Aggregator #3: 5499
+Current total of Aggregator #3: 1861
+
+Shares list for aggregator #4: 21251 
+Total of Aggregator #4: 21251
+Current total of Aggregator #4: 6753
+
+Shares list for aggregator #5: 61593 
+Total of Aggregator #5: 61593
+Current total of Aggregator #5: 18791
+
+Shares list for aggregator #6: 148083 
+Total of Aggregator #6: 148083
+Current total of Aggregator #6: 43897
+
+1.0
+1.0
+1.0
+
+Time instance 3
+
+Secret for Smart Meter #0: 2
+Elapsed time: 6.29425048828125e-05
+
+Polynomial for Smart Meter #1: 7x^5+8x^4+10x^3+2
+Shares for Smart Meter #1: [15, 321, 2107, 8193, 23751, 57025, 11, 217, 1531, 6305, 19051, 47161, 27, 329, 1861, 6753, 18791, 43897, 27, 434, 2621, 9858, 28127, 66962]
+
+Shares list for aggregator #1: 80 
+Total of Aggregator #1: 80
+Current total of Aggregator #1: 27
+
+Shares list for aggregator #2: 1301 
+Total of Aggregator #2: 1301
+Current total of Aggregator #2: 434
+
+Shares list for aggregator #3: 8120 
+Total of Aggregator #3: 8120
+Current total of Aggregator #3: 2621
+
+Shares list for aggregator #4: 31109 
+Total of Aggregator #4: 31109
+Current total of Aggregator #4: 9858
+
+Shares list for aggregator #5: 89720 
+Total of Aggregator #5: 89720
+Current total of Aggregator #5: 28127
+
+Shares list for aggregator #6: 215045 
+Total of Aggregator #6: 215045
+Current total of Aggregator #6: 66962
+
+1.0
+1.0
+1.0
+2.0
+
+Time instance 4
+
+Secret for Smart Meter #0: 1
+Elapsed time: 7.295608520507812e-05
+
+Polynomial for Smart Meter #1: 8x^5+5x^3+2x^2+5x^1+1
+Shares for Smart Meter #1: [15, 321, 2107, 8193, 23751, 57025, 11, 217, 1531, 6305, 19051, 47161, 27, 329, 1861, 6753, 18791, 43897, 27, 434, 2621, 9858, 28127, 66962, 21, 315, 2113, 8565, 25701, 63391]
+
+Shares list for aggregator #1: 101 
+Total of Aggregator #1: 101
+Current total of Aggregator #1: 21
+
+Shares list for aggregator #2: 1616 
+Total of Aggregator #2: 1616
+Current total of Aggregator #2: 315
+
+Shares list for aggregator #3: 10233 
+Total of Aggregator #3: 10233
+Current total of Aggregator #3: 2113
+
+Shares list for aggregator #4: 39674 
+Total of Aggregator #4: 39674
+Current total of Aggregator #4: 8565
+
+Shares list for aggregator #5: 115421 
+Total of Aggregator #5: 115421
+Current total of Aggregator #5: 25701
+
+Shares list for aggregator #6: 278436 
+Total of Aggregator #6: 278436
+Current total of Aggregator #6: 63391
+
+1.0
+1.0
+1.0
+2.0
+1.0
+

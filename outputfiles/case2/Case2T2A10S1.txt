@@ -1,0 +1,101 @@
+Time instance 0
+
+Secret for Smart Meter #0: 5
+Elapsed time: 0.00015306472778320312
+
+Polynomial for Smart Meter #1: 6x^9+5x^8+7x^7+1x^6+7x^5+5x^1+5
+Shares for Smart Meter #1: [36, 5551, 168662, 2026521, 14256280, 70924931, 276945786, 904364077, 2574182156, 6571700055]
+
+Shares list for aggregator #1: 36 
+Total of Aggregator #1: 36
+Current total of Aggregator #1: 36
+
+Shares list for aggregator #2: 5551 
+Total of Aggregator #2: 5551
+Current total of Aggregator #2: 5551
+
+Shares list for aggregator #3: 168662 
+Total of Aggregator #3: 168662
+Current total of Aggregator #3: 168662
+
+Shares list for aggregator #4: 2026521 
+Total of Aggregator #4: 2026521
+Current total of Aggregator #4: 2026521
+
+Shares list for aggregator #5: 14256280 
+Total of Aggregator #5: 14256280
+Current total of Aggregator #5: 14256280
+
+Shares list for aggregator #6: 70924931 
+Total of Aggregator #6: 70924931
+Current total of Aggregator #6: 70924931
+
+Shares list for aggregator #7: 276945786 
+Total of Aggregator #7: 276945786
+Current total of Aggregator #7: 276945786
+
+Shares list for aggregator #8: 904364077 
+Total of Aggregator #8: 904364077
+Current total of Aggregator #8: 904364077
+
+Shares list for aggregator #9: 2574182156 
+Total of Aggregator #9: 2574182156
+Current total of Aggregator #9: 2574182156
+
+Shares list for aggregator #10: 6571700055 
+Total of Aggregator #10: 6571700055
+Current total of Aggregator #10: 6571700055
+
+5.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 2
+Elapsed time: 0.0001678466796875
+
+Polynomial for Smart Meter #1: 6x^9+8x^7+8x^6+4x^4+3x^2+2
+Shares for Smart Meter #1: [36, 5551, 168662, 2026521, 14256280, 70924931, 276945786, 904364077, 2574182156, 6571700055, 31, 4686, 141779, 1737778, 12471327, 63084206, 249660931, 824197314, 2367064703, 6088040302]
+
+Shares list for aggregator #1: 67 
+Total of Aggregator #1: 67
+Current total of Aggregator #1: 31
+
+Shares list for aggregator #2: 10237 
+Total of Aggregator #2: 10237
+Current total of Aggregator #2: 4686
+
+Shares list for aggregator #3: 310441 
+Total of Aggregator #3: 310441
+Current total of Aggregator #3: 141779
+
+Shares list for aggregator #4: 3764299 
+Total of Aggregator #4: 3764299
+Current total of Aggregator #4: 1737778
+
+Shares list for aggregator #5: 26727607 
+Total of Aggregator #5: 26727607
+Current total of Aggregator #5: 12471327
+
+Shares list for aggregator #6: 134009137 
+Total of Aggregator #6: 134009137
+Current total of Aggregator #6: 63084206
+
+Shares list for aggregator #7: 526606717 
+Total of Aggregator #7: 526606717
+Current total of Aggregator #7: 249660931
+
+Shares list for aggregator #8: 1728561391 
+Total of Aggregator #8: 1728561391
+Current total of Aggregator #8: 824197314
+
+Shares list for aggregator #9: 4941246859 
+Total of Aggregator #9: 4941246859
+Current total of Aggregator #9: 2367064703
+
+Shares list for aggregator #10: 12659740357 
+Total of Aggregator #10: 12659740357
+Current total of Aggregator #10: 6088040302
+
+5.0
+2.0
+

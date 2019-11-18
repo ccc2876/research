@@ -1,0 +1,110 @@
+Time instance 0
+
+Secret for Smart Meter #0: 2
+Elapsed time: 3.4809112548828125e-05
+
+Polynomial for Smart Meter #1: 8x^3+1x^1+2
+Shares for Smart Meter #1: [11, 68, 221, 518]
+
+Shares list for aggregator #1: 11 
+Total of Aggregator #1: 11
+Current total of Aggregator #1: 11
+
+Shares list for aggregator #2: 68 
+Total of Aggregator #2: 68
+Current total of Aggregator #2: 68
+
+Shares list for aggregator #3: 221 
+Total of Aggregator #3: 221
+Current total of Aggregator #3: 221
+
+Shares list for aggregator #4: 518 
+Total of Aggregator #4: 518
+Current total of Aggregator #4: 518
+
+2.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 3
+Elapsed time: 3.314018249511719e-05
+
+Polynomial for Smart Meter #1: 6x^3+7x^2+6x^1+3
+Shares for Smart Meter #1: [11, 68, 221, 518, 22, 91, 246, 523]
+
+Shares list for aggregator #1: 33 
+Total of Aggregator #1: 33
+Current total of Aggregator #1: 22
+
+Shares list for aggregator #2: 159 
+Total of Aggregator #2: 159
+Current total of Aggregator #2: 91
+
+Shares list for aggregator #3: 467 
+Total of Aggregator #3: 467
+Current total of Aggregator #3: 246
+
+Shares list for aggregator #4: 1041 
+Total of Aggregator #4: 1041
+Current total of Aggregator #4: 523
+
+2.0
+3.0
+
+Time instance 2
+
+Secret for Smart Meter #0: 3
+Elapsed time: 3.218650817871094e-05
+
+Polynomial for Smart Meter #1: 9x^3+2x^2+9x^1+3
+Shares for Smart Meter #1: [11, 68, 221, 518, 22, 91, 246, 523, 23, 101, 291, 647]
+
+Shares list for aggregator #1: 56 
+Total of Aggregator #1: 56
+Current total of Aggregator #1: 23
+
+Shares list for aggregator #2: 260 
+Total of Aggregator #2: 260
+Current total of Aggregator #2: 101
+
+Shares list for aggregator #3: 758 
+Total of Aggregator #3: 758
+Current total of Aggregator #3: 291
+
+Shares list for aggregator #4: 1688 
+Total of Aggregator #4: 1688
+Current total of Aggregator #4: 647
+
+2.0
+3.0
+3.0
+
+Time instance 3
+
+Secret for Smart Meter #0: 3
+Elapsed time: 2.9802322387695312e-05
+
+Polynomial for Smart Meter #1: 4x^3+6x^2+3
+Shares for Smart Meter #1: [11, 68, 221, 518, 22, 91, 246, 523, 23, 101, 291, 647, 13, 59, 165, 355]
+
+Shares list for aggregator #1: 69 
+Total of Aggregator #1: 69
+Current total of Aggregator #1: 13
+
+Shares list for aggregator #2: 319 
+Total of Aggregator #2: 319
+Current total of Aggregator #2: 59
+
+Shares list for aggregator #3: 923 
+Total of Aggregator #3: 923
+Current total of Aggregator #3: 165
+
+Shares list for aggregator #4: 2043 
+Total of Aggregator #4: 2043
+Current total of Aggregator #4: 355
+
+2.0
+3.0
+3.0
+3.0
+

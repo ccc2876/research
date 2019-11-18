@@ -1,0 +1,77 @@
+Time instance 0
+
+Secret for Smart Meter #0: 1
+Elapsed time: 9.799003601074219e-05
+
+Polynomial for Smart Meter #1: 10x^6+2x^5+8x^3+1x^2+1x^1+1
+Shares for Smart Meter #1: [23, 775, 8005, 43541, 163531, 483883, 1212905]
+
+Shares list for aggregator #1: 23 
+Total of Aggregator #1: 23
+Current total of Aggregator #1: 23
+
+Shares list for aggregator #2: 775 
+Total of Aggregator #2: 775
+Current total of Aggregator #2: 775
+
+Shares list for aggregator #3: 8005 
+Total of Aggregator #3: 8005
+Current total of Aggregator #3: 8005
+
+Shares list for aggregator #4: 43541 
+Total of Aggregator #4: 43541
+Current total of Aggregator #4: 43541
+
+Shares list for aggregator #5: 163531 
+Total of Aggregator #5: 163531
+Current total of Aggregator #5: 163531
+
+Shares list for aggregator #6: 483883 
+Total of Aggregator #6: 483883
+Current total of Aggregator #6: 483883
+
+Shares list for aggregator #7: 1212905 
+Total of Aggregator #7: 1212905
+Current total of Aggregator #7: 1212905
+
+1.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 4
+Elapsed time: 8.797645568847656e-05
+
+Polynomial for Smart Meter #1: 10x^6+10x^4+4x^3+4
+Shares for Smart Meter #1: [23, 775, 8005, 43541, 163531, 483883, 1212905, 28, 836, 8212, 43780, 163004, 480388, 1201876]
+
+Shares list for aggregator #1: 51 
+Total of Aggregator #1: 51
+Current total of Aggregator #1: 28
+
+Shares list for aggregator #2: 1611 
+Total of Aggregator #2: 1611
+Current total of Aggregator #2: 836
+
+Shares list for aggregator #3: 16217 
+Total of Aggregator #3: 16217
+Current total of Aggregator #3: 8212
+
+Shares list for aggregator #4: 87321 
+Total of Aggregator #4: 87321
+Current total of Aggregator #4: 43780
+
+Shares list for aggregator #5: 326535 
+Total of Aggregator #5: 326535
+Current total of Aggregator #5: 163004
+
+Shares list for aggregator #6: 964271 
+Total of Aggregator #6: 964271
+Current total of Aggregator #6: 480388
+
+Shares list for aggregator #7: 2414781 
+Total of Aggregator #7: 2414781
+Current total of Aggregator #7: 1201876
+
+1.0
+4.0
+
