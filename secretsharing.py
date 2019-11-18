@@ -222,7 +222,7 @@ def main():
             print("invalid input file, please retry")
             exit(1)
 
-    out = open("outputfiles/Case3" + "T" + str(time_instances) + "A" + str(aggregators) + "S" + str(sm_num) + ".txt", "w")
+    out = open("outputfiles/case3/Case3" + "T" + str(time_instances) + "A" + str(aggregators) + "S" + str(sm_num) + ".txt", "w")
 
     aggregator_list = []
     smart_meter_list = []

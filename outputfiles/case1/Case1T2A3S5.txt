@@ -1,0 +1,77 @@
+Time instance 0
+
+Secret for Smart Meter #0: 5
+Secret for Smart Meter #1: 3
+Secret for Smart Meter #2: 4
+Secret for Smart Meter #3: 5
+Secret for Smart Meter #4: 2
+Elapsed time: 8.225440979003906e-05
+
+Polynomial for Smart Meter #1: 3x^2+10x^1+5
+Shares for Smart Meter #1: [18, 37, 62]
+
+Polynomial for Smart Meter #2: 7x^2+10x^1+3
+Shares for Smart Meter #2: [20, 51, 96]
+
+Polynomial for Smart Meter #3: 4x^2+8x^1+4
+Shares for Smart Meter #3: [16, 36, 64]
+
+Polynomial for Smart Meter #4: 9x^2+5
+Shares for Smart Meter #4: [14, 41, 86]
+
+Polynomial for Smart Meter #5: 5x^2+2
+Shares for Smart Meter #5: [7, 22, 47]
+
+Shares list for aggregator #1: 18 20 16 14 7 
+Total of Aggregator #1: 75
+Current total of Aggregator #1: 75
+
+Shares list for aggregator #2: 37 51 36 41 22 
+Total of Aggregator #2: 187
+Current total of Aggregator #2: 187
+
+Shares list for aggregator #3: 62 96 64 86 47 
+Total of Aggregator #3: 355
+Current total of Aggregator #3: 355
+
+19.0
+
+Time instance 1
+
+Secret for Smart Meter #0: 2
+Secret for Smart Meter #1: 2
+Secret for Smart Meter #2: 2
+Secret for Smart Meter #3: 4
+Secret for Smart Meter #4: 1
+Elapsed time: 8.606910705566406e-05
+
+Polynomial for Smart Meter #1: 8x^2+3x^1+2
+Shares for Smart Meter #1: [18, 37, 62, 13, 40, 83]
+
+Polynomial for Smart Meter #2: 8x^2+2
+Shares for Smart Meter #2: [20, 51, 96, 10, 34, 74]
+
+Polynomial for Smart Meter #3: 3x^2+2
+Shares for Smart Meter #3: [16, 36, 64, 5, 14, 29]
+
+Polynomial for Smart Meter #4: 3x^2+8x^1+4
+Shares for Smart Meter #4: [14, 41, 86, 15, 32, 55]
+
+Polynomial for Smart Meter #5: 7x^2+1
+Shares for Smart Meter #5: [7, 22, 47, 8, 29, 64]
+
+Shares list for aggregator #1: 31 30 21 29 15 
+Total of Aggregator #1: 126
+Current total of Aggregator #1: 51
+
+Shares list for aggregator #2: 77 85 50 73 51 
+Total of Aggregator #2: 336
+Current total of Aggregator #2: 149
+
+Shares list for aggregator #3: 145 170 93 141 111 
+Total of Aggregator #3: 660
+Current total of Aggregator #3: 305
+
+19.0
+11.0
+
