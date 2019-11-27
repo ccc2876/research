@@ -1,5 +1,4 @@
 import time
-import copy
 import random
 from ElectricalUtility import ElectricalUtility
 from Aggregator import Aggregator
