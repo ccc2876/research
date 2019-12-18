@@ -1,4 +1,5 @@
 import random
+import socket
 
 
 class SmartMeter:
@@ -103,6 +104,7 @@ class SmartMeter:
         value += self.secret
         self.shares_list.append(value)
 
+        #UPDATE THIS TO BE DONE IN SERVER
         if len(aggregator.shares_list) == self.ID - 1:
             aggregator.shares_list.append(value)
         else:
@@ -116,4 +118,21 @@ class SmartMeter:
 
     def get_time(self):
         print(self.times_list)
+
+
+if __name__ == "__main__":
+    TCP_IP = '127.0.0.1'
+    TCP_PORT1 = 5005
+    TCP_PORT2 = 5006
+    BUFFER_SIZE = 1024
+    secret = random.randint(1, 5)
+    sm=SmartMeter(1,2)
+    sm.set_secret(secret)
+    print(secret)
+    s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s1.connect((TCP_IP, TCP_PORT1))
+    s2.connect((TCP_IP, TCP_PORT2))
+    s1.send(str(secret).encode('utf8'))
+    s2.send(str(secret).encode('utf8'))
 
