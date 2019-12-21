@@ -83,11 +83,9 @@ class Aggregator:
         """
         return self.delta_func_multiplier
 
-    def bytes_to_int(self, bytes):
-        result = 0
-        for b in bytes:
-            result = result * 256 + int(b)
-        return result
+    def append_shares(self,share):
+        self.shares_list.append(share)
+
 
 
 def threaded(conn,aggregator):
@@ -109,18 +107,20 @@ def threaded(conn,aggregator):
             break
 
         data = pickle.loads(data)
+        aggregator.append_shares(data)
+        aggregator.update_totals()
         print(data)
 
 if __name__ == "__main__":
     TCP_IP = '127.0.0.1'
-    TCP_PORT = 5007
+    TCP_PORT = 5006
     BUFFER_SIZE = 20  # Normally 1024, but we want fast response
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((TCP_IP, TCP_PORT))
     s.listen()
     aggregator_list = []
     smart_meter_list = []
-    ID = 2
+    ID = 1
     aggregator = Aggregator(ID)
     counter = 0
 
@@ -142,3 +142,4 @@ if __name__ == "__main__":
         conn.send(str(ID).encode())
 
         start_new_thread(threaded, (conn,aggregator))
+

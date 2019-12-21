@@ -1,6 +1,7 @@
 import random
 import socket
 import pickle
+import time
 
 
 class SmartMeter:
@@ -145,7 +146,6 @@ if __name__ == "__main__":
 
     aggregator_IDs = []
 
-
     d1 = s1.recv(1024)
     d2 = s2.recv(1024)
     d1 = int(d1.decode())
@@ -159,9 +159,13 @@ if __name__ == "__main__":
 
     counter = 0
     for id in aggregator_IDs:
+        single_share_time_start = time.time()
         val = sm.create_shares(id)
         print(val)
         connections[counter].send(pickle.dumps(val))
+        single_share_time_end = time.time()
+        print(single_share_time_end - single_share_time_start)
+        sm.add_time(single_share_time_end - single_share_time_start)
         counter += 1
 
 
