@@ -6,7 +6,6 @@ print_lock = threading.Lock()
 
 
 class Aggregator:
-
     """
     Aggregator class attributes
     ID -- the ID that corresponds to the aggregators
@@ -86,30 +85,33 @@ class Aggregator:
             result = result * 256 + int(b)
         return result
 
-    def threaded(self,conn):
+    def threaded(self, conn):
         while True:
             data = conn.recv(1024)
             if not data:
                 print_lock.release()
                 break
 
-            data=data.decode()
+            data = data.decode()
             print(data)
 
         conn.close()
 
+
 if __name__ == "__main__":
     TCP_IP = '127.0.0.1'
-    TCP_PORT = 5006
+    TCP_PORT = 5008
     BUFFER_SIZE = 20  # Normally 1024, but we want fast response
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((TCP_IP, TCP_PORT))
-    s.listen(1)
+    s.bind((TCP_IP, ++TCP_PORT))
+    s.listen(5)
     aggregator_list = []
     smart_meter_list = []
-    aggregator = Aggregator(1)
+    ID = 3
+    aggregator = Aggregator(ID)
     aggregator_list.append(aggregator)
     counter = 0
+
     for i in range(0, len(aggregator_list)):
         a = aggregator_list[counter]
         top = ""
@@ -124,9 +126,5 @@ if __name__ == "__main__":
         conn, addr = s.accept()
         print_lock.acquire()
         print('Connected to :', addr[0], ':', addr[1])
+        conn.send(str(ID).encode())
         start_new_thread(aggregator.threaded, (conn,))
-
-
-
-
-
