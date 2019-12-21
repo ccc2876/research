@@ -103,10 +103,8 @@ def threaded(conn,aggregator):
     aggregator.calculate_lagrange_multiplier(len(agg))
 
     while True:
-        print('here')
         data = conn.recv(1024)
         if not data:
-            print('there')
             print_lock.release()
             break
 

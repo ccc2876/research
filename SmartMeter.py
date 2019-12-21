@@ -86,8 +86,9 @@ class SmartMeter:
         # add the secret to the end of the polynomial as the constant
         polystring += str(self.secret)
         self.polynomial = polystring
+        print(self.polynomial)
 
-    def create_shares(self, aggregator):
+    def create_shares(self, aggregator_ID):
         """
         generates the shares from this smart meter
         using the polynomial that belongs to this smart meter the ID value of the aggregator that is passed in
@@ -100,16 +101,17 @@ class SmartMeter:
         power = self.degree
         value = 0
         for i in range(0, length):
-            value += self.coeff_list[i] * (aggregator.get_ID() ** power)
+            value += self.coeff_list[i] * (aggregator_ID ** power)
             power -= 1
         value += self.secret
         self.shares_list.append(value)
+        return value
 
         #UPDATE THIS TO BE DONE IN SERVER
-        if len(aggregator.shares_list) == self.ID - 1:
-            aggregator.shares_list.append(value)
-        else:
-            aggregator.shares_list[self.ID - 1] += value
+        # if len(aggregator.shares_list) == self.ID - 1:
+        #     aggregator.shares_list.append(value)
+        # else:
+        #     aggregator.shares_list[self.ID - 1] += value
 
     def get_shares_list(self):
         return str(self.shares_list)
@@ -126,33 +128,40 @@ if __name__ == "__main__":
     TCP_PORT1 = 5006
     TCP_PORT2 = 5007
     BUFFER_SIZE = 1024
-
+    connections = []
 
     s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s1.connect((TCP_IP, TCP_PORT1))
+    connections.append(s1)
     s2.connect((TCP_IP, TCP_PORT2))
-
+    connections.append(s2)
 
     secret = random.randint(1, 5)
+
     sm = SmartMeter(1, 1)
     sm.set_secret(secret)
     sm.create_polynomial()
-
 
     aggregator_IDs = []
 
 
     d1 = s1.recv(1024)
     d2 = s2.recv(1024)
-    print(d1.decode())
-    print(d2.decode())
+    d1 = int(d1.decode())
+    d2 = int(d2.decode())
+    print(d1, d2)
     aggregator_IDs.append(d1)
     aggregator_IDs.append(d2)
-    data=pickle.dumps(aggregator_IDs)
+    data = pickle.dumps(aggregator_IDs)
     s1.send(data)
     s2.send(data)
 
-    sm.create_shares()
-    s1.send(pickle.dumps(secret))
-    s2.send(pickle.dumps(secret))
+    counter = 0
+    for id in aggregator_IDs:
+        val = sm.create_shares(id)
+        print(val)
+        connections[counter].send(pickle.dumps(val))
+        counter += 1
+
+
