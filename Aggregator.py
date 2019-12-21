@@ -1,8 +1,12 @@
-import socket
 from _thread import *
 import threading
+import socket
+import pickle
 
 print_lock = threading.Lock()
+
+
+
 
 
 class Aggregator:
@@ -85,31 +89,41 @@ class Aggregator:
             result = result * 256 + int(b)
         return result
 
-    def threaded(self, conn):
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                print_lock.release()
-                break
 
-            data = data.decode()
-            print(data)
+def threaded(conn,aggregator):
 
-        conn.close()
+    agg = conn.recv(1024)
+    if not agg:
+        print_lock.release()
 
+    agg = pickle.loads(agg)
+    for j in range(0,len(agg)):
+        agg[j] = int(agg[j])
+    print(agg)
+    aggregator.calculate_lagrange_multiplier(len(agg))
+
+    while True:
+        print('here')
+        data = conn.recv(1024)
+        if not data:
+            print('there')
+            print_lock.release()
+            break
+
+        data = pickle.loads(data)
+        print(data)
 
 if __name__ == "__main__":
     TCP_IP = '127.0.0.1'
-    TCP_PORT = 5008
+    TCP_PORT = 5007
     BUFFER_SIZE = 20  # Normally 1024, but we want fast response
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((TCP_IP, ++TCP_PORT))
-    s.listen(5)
+    s.bind((TCP_IP, TCP_PORT))
+    s.listen()
     aggregator_list = []
     smart_meter_list = []
-    ID = 3
+    ID = 2
     aggregator = Aggregator(ID)
-    aggregator_list.append(aggregator)
     counter = 0
 
     for i in range(0, len(aggregator_list)):
@@ -126,5 +140,7 @@ if __name__ == "__main__":
         conn, addr = s.accept()
         print_lock.acquire()
         print('Connected to :', addr[0], ':', addr[1])
+        smart_meter_list.append(conn)
         conn.send(str(ID).encode())
-        start_new_thread(aggregator.threaded, (conn,))
+
+        start_new_thread(threaded, (conn,aggregator))

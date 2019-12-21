@@ -1,5 +1,6 @@
 import random
 import socket
+import pickle
 
 
 class SmartMeter:
@@ -124,27 +125,34 @@ if __name__ == "__main__":
     TCP_IP = '127.0.0.1'
     TCP_PORT1 = 5006
     TCP_PORT2 = 5007
-    TCP_PORT3 = 5008
     BUFFER_SIZE = 1024
-    secret = random.randint(1, 5)
-    sm = SmartMeter(1, 2)
-    sm.set_secret(secret)
-    sm.create_polynomial()
-    print(secret)
+
 
     s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s3 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s1.connect((TCP_IP, TCP_PORT1))
     s2.connect((TCP_IP, TCP_PORT2))
-    s3.connect((TCP_IP, TCP_PORT3))
+
+
+    secret = random.randint(1, 5)
+    sm = SmartMeter(1, 1)
+    sm.set_secret(secret)
+    sm.create_polynomial()
+
+
+    aggregator_IDs = []
+
+
     d1 = s1.recv(1024)
     d2 = s2.recv(1024)
-    d3 = s3.recv(1024)
     print(d1.decode())
     print(d2.decode())
-    print(d3.decode())
-    s1.send(str(secret).encode('utf8'))
-    s2.send(str(secret).encode('utf8'))
-    s3.send(str(secret).encode('utf8'))
+    aggregator_IDs.append(d1)
+    aggregator_IDs.append(d2)
+    data=pickle.dumps(aggregator_IDs)
+    s1.send(data)
+    s2.send(data)
 
+    sm.create_shares()
+    s1.send(pickle.dumps(secret))
+    s2.send(pickle.dumps(secret))
