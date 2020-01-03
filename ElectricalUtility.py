@@ -4,7 +4,7 @@ import threading
 import pickle
 import sys
 from numpy import long
-import time
+
 
 
 print_lock = threading.Lock()
@@ -39,25 +39,24 @@ class ElectricalUtility:
 
 
 def threaded(conn, eu):
-    print_lock.acquire()
     data = conn.recv(1024)
     while True:
         if not data:
             print_lock.release()
             break
         else:
-            print(data)
-            data = pickle.loads(data)
-            eu.add_sums(data)
-            print_lock.release()
+            val = pickle.loads(data)
+            eu.add_sums(val)
+            print(val)
+
+
+
 
 
 def calculate_total(eu):
-    print("Calculating the totals")
     total = long(abs(sum(eu.sums)))
     if not (total == 0):
         eu.add_reading(total)
-    print(eu.values)
 
 
 if __name__ == '__main__':
@@ -78,8 +77,11 @@ if __name__ == '__main__':
         conn, addr = s.accept()
         connections.append(conn)
         print('Connected to :', addr[0], ':', addr[1])
+        print_lock.acquire()
         start_new_thread(threaded, (conn, eu))
+        print_lock.release()
         calculate_total(eu)
+        print(eu.values)
 
 
 

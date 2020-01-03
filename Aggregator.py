@@ -40,7 +40,7 @@ class Aggregator:
         bottom = 1
         for i in range(1, num_aggregators + 1):
             if i != self.get_ID():
-                top *= i
+                top *= -i
                 bottom *= (self.get_ID() - i)
 
         self.delta_func_multiplier = top / bottom
@@ -88,7 +88,6 @@ class Aggregator:
 
 
 def threaded(conn, aggregator, client):
-
     agg = conn.recv(1024)
     if agg:
         agg = pickle.loads(agg)
@@ -97,6 +96,7 @@ def threaded(conn, aggregator, client):
             agg[j] = int(agg[j])
 
         aggregator.calculate_lagrange_multiplier(len(agg))
+        print(aggregator.get_lagrange_multiplier)
 
         while True:
             data = conn.recv(1024)
@@ -108,10 +108,15 @@ def threaded(conn, aggregator, client):
 
                 constant = long(aggregator.get_current_total()) * long(aggregator.get_lagrange_multiplier())
                 constants.append(constant)
-            if not data:
+            else:
+                print("These will be the c values")
                 for c in constants:
+                    print(c)
                     client.send(pickle.dumps(c))
                 break
+
+
+
 
 
 if __name__ == '__main__':
