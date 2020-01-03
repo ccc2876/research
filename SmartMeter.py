@@ -15,14 +15,20 @@ class SmartMeter:
     shares_list -- holds the shares that this smart meter created
     """
 
-    def __init__(self, ID, degree):
-        self.ID = ID
-        self.degree = degree
+    def __init__(self):
+        self.ID = 0
+        self.degree = 0
         self.secret = 0
         self.polynomial = ""
         self.coeff_list = []
         self.shares_list = []
-        self.times_list=[]
+        self.times_list = []
+
+    def set_id(self, ID):
+        self.ID = ID
+
+    def set_degree(self, deg):
+        self.degree = deg
 
     def set_polynomial(self, poly):
         """
@@ -108,12 +114,6 @@ class SmartMeter:
         self.shares_list.append(value)
         return value
 
-        #UPDATE THIS TO BE DONE IN SERVER
-        # if len(aggregator.shares_list) == self.ID - 1:
-        #     aggregator.shares_list.append(value)
-        # else:
-        #     aggregator.shares_list[self.ID - 1] += value
-
     def get_shares_list(self):
         return str(self.shares_list)
 
@@ -124,48 +124,52 @@ class SmartMeter:
         print(self.times_list)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     TCP_IP = '127.0.0.1'
     TCP_PORT1 = 5006
     TCP_PORT2 = 5007
     BUFFER_SIZE = 1024
     connections = []
-
     s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s1.connect((TCP_IP, TCP_PORT1))
     connections.append(s1)
     s2.connect((TCP_IP, TCP_PORT2))
     connections.append(s2)
-
-    secret = random.randint(1, 5)
-
-    sm = SmartMeter(1, 1)
-    sm.set_secret(secret)
-    sm.create_polynomial()
-
     aggregator_IDs = []
-
     d1 = s1.recv(1024)
     d2 = s2.recv(1024)
-    d1 = int(d1.decode())
-    d2 = int(d2.decode())
-    print(d1, d2)
+    d1 = pickle.loads(d1)
+    d2 = pickle.loads(d2)
+    print(d1)
     aggregator_IDs.append(d1)
     aggregator_IDs.append(d2)
     data = pickle.dumps(aggregator_IDs)
     s1.send(data)
     s2.send(data)
+    secrets=[]
 
-    counter = 0
-    for id in aggregator_IDs:
-        single_share_time_start = time.time()
-        val = sm.create_shares(id)
-        print(val)
-        connections[counter].send(pickle.dumps(val))
-        single_share_time_end = time.time()
-        print(single_share_time_end - single_share_time_start)
-        sm.add_time(single_share_time_end - single_share_time_start)
-        counter += 1
-
+    for t in range(0, 9):
+        print("Time Instance #", t)
+        constants = []
+        secret = random.randint(1, 5)
+        sm = SmartMeter()
+        sm.set_id(1)
+        sm.set_degree(len(aggregator_IDs) - 1)
+        sm.set_secret(secret)
+        secrets.append(secret)
+        sm.create_polynomial()
+        counter = 0
+        shares = []
+        for id in aggregator_IDs:
+            single_share_time_start = time.time()
+            val = sm.create_shares(id)
+            shares.append(val)
+            connections[counter].send(pickle.dumps(val))
+            single_share_time_end = time.time()
+            sm.add_time(single_share_time_end - single_share_time_start)
+            print(single_share_time_end - single_share_time_start)
+            counter += 1
+        print("Shares for smart meter: ", shares)
+    print(sum(secrets))
 

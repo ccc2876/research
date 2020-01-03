@@ -1,3 +1,15 @@
+import socket
+from _thread import *
+import threading
+import pickle
+import sys
+from numpy import long
+import time
+
+
+print_lock = threading.Lock()
+
+
 class ElectricalUtility:
     """
     class for the electrical utility company
@@ -7,6 +19,7 @@ class ElectricalUtility:
 
     def __init__(self):
         self.values = []
+        self.sums= []
 
     def add_reading(self, value):
         """
@@ -15,9 +28,63 @@ class ElectricalUtility:
         """
         self.values.append(value)
 
+    def add_sums(self, x):
+        self.sums.append(x)
+
     def return_values(self):
         """
         prints the list of values
         """
         return self.values
+
+
+def threaded(conn, eu):
+    print_lock.acquire()
+    data = conn.recv(1024)
+    while True:
+        if not data:
+            print_lock.release()
+            break
+        else:
+            print(data)
+            data = pickle.loads(data)
+            eu.add_sums(data)
+            print_lock.release()
+
+
+def calculate_total(eu):
+    print("Calculating the totals")
+    total = long(abs(sum(eu.sums)))
+    if not (total == 0):
+        eu.add_reading(total)
+    print(eu.values)
+
+
+if __name__ == '__main__':
+    eu = ElectricalUtility()
+    TCP_IP = '127.0.0.1'
+    PORT = int(sys.argv[1])
+    BUFFER_SIZE = 1024
+    connections = []
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind((TCP_IP, PORT))
+
+    print("Server started")
+    print("Waiting for client request..")
+
+    while True:
+
+        s.listen(2)
+        conn, addr = s.accept()
+        connections.append(conn)
+        print('Connected to :', addr[0], ':', addr[1])
+        start_new_thread(threaded, (conn, eu))
+        calculate_total(eu)
+
+
+
+
+
+
+
 
