@@ -141,14 +141,15 @@ if __name__ == '__main__':
     d2 = s2.recv(1024)
     d1 = pickle.loads(d1)
     d2 = pickle.loads(d2)
-    print(d1)
     aggregator_IDs.append(d1)
     aggregator_IDs.append(d2)
     data = pickle.dumps(aggregator_IDs)
     s1.send(data)
     s2.send(data)
-    secrets=[]
+    secrets = []
 
+    s1.send(pickle.dumps(9))
+    s2.send(pickle.dumps(9))
     for t in range(0, 9):
         print("Time Instance #", t)
         constants = []

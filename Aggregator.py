@@ -1,12 +1,8 @@
 from _thread import *
-import threading
 import socket
 import pickle
 from numpy import long
 import sys
-
-
-constants = []
 
 
 class Aggregator:
@@ -27,6 +23,7 @@ class Aggregator:
         self.total = 0
         self.delta_func_multiplier = 0
         self.lagrange = ""
+        self.sumofshares= 0
 
     def set_lagrange(self, equation):
         self.lagrange = equation
@@ -86,8 +83,14 @@ class Aggregator:
     def append_shares(self, share):
         self.shares_list.append(share)
 
+    def calc_sum(self,value):
+        self.sumofshares += value
 
-def threaded(conn, aggregator, client):
+    def get_sum(self):
+        return self.sumofshares
+
+
+def threaded(conn, ag, client):
     agg = conn.recv(1024)
     if agg:
         agg = pickle.loads(agg)
@@ -95,28 +98,31 @@ def threaded(conn, aggregator, client):
         for j in range(0, len(agg)):
             agg[j] = int(agg[j])
 
-        aggregator.calculate_lagrange_multiplier(len(agg))
-        print(aggregator.get_lagrange_multiplier)
+        ag.calculate_lagrange_multiplier(len(agg))
+        print(ag.get_lagrange_multiplier())
 
-        while True:
+        time = conn.recv(1024)
+        if time:
+            time = pickle.loads(time)
+            print("time", time)
+            client.send(pickle.dumps(time))
+
+        counter = 0
+        while counter < time:
             data = conn.recv(1024)
             if data:
                 data = pickle.loads(data)
-                print(data)
-                aggregator.append_shares(data)
-                aggregator.update_totals()
+                ag.append_shares(data)
+                ag.update_totals()
 
-                constant = long(aggregator.get_current_total()) * long(aggregator.get_lagrange_multiplier())
-                constants.append(constant)
-            else:
-                print("These will be the c values")
-                for c in constants:
-                    print(c)
-                    client.send(pickle.dumps(c))
-                break
+                constant = long(ag.get_current_total()) * long(ag.get_lagrange_multiplier())
+                ag.calc_sum(constant)
 
+                counter += 1
 
-
+        val = ag.get_sum()
+        print(val)
+        client.send(pickle.dumps(val))
 
 
 if __name__ == '__main__':
@@ -138,9 +144,10 @@ if __name__ == '__main__':
     ID = int(sys.argv[3])
     aggregator = Aggregator(ID)
     aggregator_list.append(aggregator)
-    counter = 0
+
+    lcounter = 0
     for i in range(0, len(aggregator_list)):
-        a = aggregator_list[counter]
+        a = aggregator_list[lcounter]
         top = ""
         bottom = 1
         for a2 in aggregator_list:
@@ -148,8 +155,7 @@ if __name__ == '__main__':
                 top += "(x - " + str(a2.get_ID()) + ")"
                 bottom *= (a.get_ID() - a2.get_ID())
                 a.set_lagrange(top + "/" + str(bottom))
-        counter += 1
-        print(a.lagrange)
+        lcounter += 1
 
     while True:
         s.listen()
