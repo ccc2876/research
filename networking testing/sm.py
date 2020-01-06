@@ -8,12 +8,12 @@ from SmartMeter import SmartMeter
 def main():
     aggregator_IDs = []
     connections = []
-    time_length = 5
+    time_length = 1
     num_aggs = 2
 
     # set up the smart meter object
     sm = SmartMeter()
-    sm.set_id(2)
+    sm.set_id(1)
 
     for i in range(0, num_aggs):
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -43,6 +43,8 @@ def main():
     counter = 0
     secrets = []
     sm.set_degree(len(aggregator_IDs) - 1)
+
+
     while counter < time_length:
         constants = []
         secret = random.randint(1, 5)
@@ -63,6 +65,7 @@ def main():
             print(single_share_time_end - single_share_time_start)
         counter += 1
     print(sum(secrets))
+
 
 
 if __name__ == "__main__":

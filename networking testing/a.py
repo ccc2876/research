@@ -33,34 +33,37 @@ def start_server(connections, eu_conn):
         conn.sendall(str(aggregator.get_ID()).encode("utf-8"))
         try:
             Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn)).start()
-        except:
+        except Exception as e:
+            print(e)
             print("Thread did not start.")
             traceback.print_exc()
+
+
+
 
 
 def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120):
     sm_id = receive_input(connection, max_buffer_size)
     time_length = int(receive_input(connection, max_buffer_size))
     agg_num = int(receive_input(connection, max_buffer_size))
-    agg_num = str(agg_num) + DELIMITER
 
-    eu_conn.sendall(agg_num.encode("utf-8"))
+    # agg_num = int(agg_num.strip(DELIMITER))
     aggregator.calculate_lagrange_multiplier(int(agg_num))
     counter = 0
     is_active = True
     shares = True
     while is_active:
         meter_id = int(sm_id)
-        print("sending id to eu of", sm_id)
+        # print("sending id to eu of", sm_id)
         meter_id = str(meter_id) + DELIMITER
-        eu_conn.sendall(meter_id.encode("utf-8"))
+        meter_id = int(meter_id.strip(DELIMITER))
         is_active = False
         while shares:
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 print("Processed result: {}".format(client_input))
                 aggregator.append_shares(int(client_input), meter_id)
-                aggregator.update_totals(meter_id)
+                aggregator.update_totals(int(meter_id))
                 constant = long(aggregator.get_current_total(meter_id)) * long(aggregator.get_lagrange_multiplier())
                 aggregator.calc_sum(constant, meter_id)
                 counter += 1
@@ -69,12 +72,15 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
             else:
                 connection.close()
                 print("Connection " + str(ip) + ":" + str(port) + " closed")
+                sending_string = str(agg_num) + DELIMITER
+                sending_string += str(meter_id) + DELIMITER
                 val = aggregator.get_sum(meter_id)
-                print(val)
                 val = str(val) + DELIMITER
-                eu_conn.sendall(val.encode("utf-8"))
-                time.sleep(1)
-                eu_conn.sendall("done\n".encode("utf-8"))
+                sending_string += val
+                # val = int(val.strip(DELIMITER))
+                sending_string += "done\n"
+                print(sending_string)
+                eu_conn.sendall(sending_string.encode("utf-8"))
                 shares = False
 
 
@@ -104,6 +110,8 @@ def main():
 
     connections = []
     start_server(connections, soc)
+    for conn in connections:
+        conn.close()
 
 
 

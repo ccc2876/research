@@ -7,6 +7,7 @@ from threading import Thread
 
 print_lock = threading.Lock()
 
+DELIMITER = "\n"
 
 def main():
     start_server()
@@ -27,7 +28,7 @@ def start_server():
         sys.exit()
     soc.listen(6)  # queue up to 6 requests
     print("Socket now listening")
-    # infinite loop- do not reset for every requests
+
     while True:
         connection, address = soc.accept()
         connections.append(connection)
@@ -44,31 +45,22 @@ def start_server():
 def clientThread(connection, eu, ip, port, max_buffer_size=5120):
     sm_num = receive_input(connection, max_buffer_size)
     sm_num = int(sm_num[0])
-    num_aggs = receive_input(connection, max_buffer_size)
-    num_aggs = int(num_aggs[0])
     eu.set_num_sm(int(sm_num))
-    eu.set_num_aggs(int(num_aggs))
     is_active = True
 
     while is_active:
-        sm_id = int(receive_input(connection, max_buffer_size))
-        is_active = False
-        id = True
-        while id:
-            client_input = receive_input(connection, max_buffer_size)
-            if client_input:
-                if client_input == "done":
-                    is_active = True
-                    break
-                print("input:", int(client_input))
-                eu.add_sums(int(client_input), int(sm_id))
-                print(eu.return_values())
-                is_active = True
+        input = receive_input(connection, max_buffer_size)
+        print(input)
+        if input:
+            num_aggs = int(input[0])
+            sm_id = int(input[1])
+            value = int(input[2])
+            eu.set_num_aggs(int(num_aggs))
+            eu.add_sums(value, sm_id)
+            print(eu.return_values())
+        if not connection:
+            break
 
-            else:
-                print("here")
-                is_active = False
-                id = False
 
 
 def receive_input(connection, max_buffer_size):
@@ -76,8 +68,8 @@ def receive_input(connection, max_buffer_size):
     client_input_size = sys.getsizeof(client_input)
     if client_input_size > max_buffer_size:
         print("The input size is greater than expected {}".format(client_input_size))
-    decoded_input = client_input.decode("utf8").split("\n")
-    # result = process_input(decoded_input)
+    print(client_input.decode("utf8"))
+    decoded_input = client_input.decode("utf8").split(DELIMITER)
     return decoded_input
 
 
