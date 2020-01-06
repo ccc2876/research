@@ -16,14 +16,14 @@ class Aggregator:
     delta_func_multiplier -- the delta function multiplier which is made using lagrange interpolation
     """
 
-    def __init__(self, ID):
+    def __init__(self, ID, num_smart_meters):
         self.ID = ID
-        self.shares_list = []
-        self.current_total = 0
-        self.total = 0
+        self.shares_list = [0] * num_smart_meters
+        self.current_total = [0] * num_smart_meters
+        self.total = [0] * num_smart_meters
         self.delta_func_multiplier = 0
         self.lagrange = ""
-        self.sumofshares= 0
+        self.sumofshares= [0] * num_smart_meters
 
     def set_lagrange(self, equation):
         self.lagrange = equation
@@ -39,8 +39,8 @@ class Aggregator:
             if i != self.get_ID():
                 top *= -i
                 bottom *= (self.get_ID() - i)
-
         self.delta_func_multiplier = top / bottom
+        print(self.delta_func_multiplier)
 
     def print_shares_list(self):
         """
@@ -58,21 +58,21 @@ class Aggregator:
         """
         return self.ID
 
-    def update_totals(self):
+    def update_totals(self, sm_id):
         """
         updates the totals that the aggregator holds
         total is the total combined shares from all time instances and aggregators
         current total is the total from the most recent set of shares
         """
-        temp = self.total
-        self.total = sum(self.shares_list)
-        self.current_total = self.total - temp
+        temp = self.total[sm_id-1]
+        self.total[sm_id-1] = self.shares_list[sm_id-1]
+        self.current_total[sm_id-1] = self.total[sm_id-1] - temp
 
-    def get_current_total(self):
+    def get_current_total(self, sm_id):
         """
         :return: the current total of the shares that were most recently sent
         """
-        return self.current_total
+        return self.current_total[sm_id-1]
 
     def get_lagrange_multiplier(self):
         """
@@ -80,17 +80,20 @@ class Aggregator:
         """
         return self.delta_func_multiplier
 
-    def append_shares(self, share):
-        self.shares_list.append(share)
+    def append_shares(self, share, sm_id):
+        # self.shares_list.append(share)
+        # print(self.shares_list)
+        self.shares_list[int(sm_id)-1] += share
+        print(self.shares_list)
 
-    def calc_sum(self,value):
-        self.sumofshares += value
+    def calc_sum(self,value, sm_id):
+        self.sumofshares[sm_id-1] += value
 
-    def get_sum(self):
-        return self.sumofshares
+    def get_sum(self, sm_id):
+        return self.sumofshares[sm_id-1]
 
 
-def threaded(conn, ag, client):
+def threaded(conn, ag, client, t):
     agg = conn.recv(1024)
     if agg:
         agg = pickle.loads(agg)
@@ -99,30 +102,22 @@ def threaded(conn, ag, client):
             agg[j] = int(agg[j])
 
         ag.calculate_lagrange_multiplier(len(agg))
-        print(ag.get_lagrange_multiplier())
-
-        time = conn.recv(1024)
-        if time:
-            time = pickle.loads(time)
-            print("time", time)
-            client.send(pickle.dumps(time))
 
         counter = 0
-        while counter < time:
+        while counter < t:
             data = conn.recv(1024)
             if data:
                 data = pickle.loads(data)
                 ag.append_shares(data)
                 ag.update_totals()
-
                 constant = long(ag.get_current_total()) * long(ag.get_lagrange_multiplier())
                 ag.calc_sum(constant)
-
                 counter += 1
 
         val = ag.get_sum()
         print(val)
         client.send(pickle.dumps(val))
+        conn.close()
 
 
 if __name__ == '__main__':
@@ -163,5 +158,9 @@ if __name__ == '__main__':
         print('Connected to :', addr[0], ':', addr[1])
         smart_meter_list.append(conn)
         conn.send(pickle.dumps(ID))
-        start_new_thread(threaded, (conn, aggregator, client))
+        t = conn.recv(1024)
+        t = pickle.loads(t)
+        print("time", t)
+        start_new_thread(threaded, (conn, aggregator, client, t))
+
 

@@ -136,6 +136,9 @@ if __name__ == '__main__':
     connections.append(s1)
     s2.connect((TCP_IP, TCP_PORT2))
     connections.append(s2)
+    t = 9
+    s1.send(pickle.dumps(t))
+    s2.send(pickle.dumps(t))
     aggregator_IDs = []
     d1 = s1.recv(1024)
     d2 = s2.recv(1024)
@@ -148,8 +151,6 @@ if __name__ == '__main__':
     s2.send(data)
     secrets = []
 
-    s1.send(pickle.dumps(9))
-    s2.send(pickle.dumps(9))
     for t in range(0, 9):
         print("Time Instance #", t)
         constants = []
@@ -173,4 +174,7 @@ if __name__ == '__main__':
             counter += 1
         print("Shares for smart meter: ", shares)
     print(sum(secrets))
+
+    for conn in connections:
+        conn.close()
 

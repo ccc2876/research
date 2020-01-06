@@ -4,7 +4,6 @@ import threading
 import pickle
 import sys
 
-
 print_lock = threading.Lock()
 
 
@@ -19,6 +18,17 @@ class ElectricalUtility:
         self.values = []
         self.sums = []
         self.reading = 0
+        self.num_aggregators = 0
+        self.counter = 0
+        self.smart_meter_num =0
+
+    def set_num_aggs(self, num):
+        self.num_aggregators = num
+
+    def set_num_sm(self, num):
+        self.smart_meter_num = num
+        self.values = [0] * self.smart_meter_num
+
 
     def add_reading(self, value):
         """
@@ -27,8 +37,9 @@ class ElectricalUtility:
         """
         self.values.append(value)
 
-    def add_sums(self, x):
-        self.reading += int(x)
+    def add_sums(self, x, sm_id):
+        self.values[int(sm_id)-1] += x
+
 
     def return_values(self):
         """
@@ -38,27 +49,12 @@ class ElectricalUtility:
 
 
 def threaded(conn, eu):
-    time = conn.recv(1024)
-    if time:
-        time = pickle.loads(time)
-        counter = 0
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                print_lock.release()
-                break
-            else:
-                val = pickle.loads(data)
-                eu.add_sums(val)
-                calculate_total(eu)
-            counter += 1
-            print(counter)
+    data = conn.recv(1024)
+    if not data:
+        print(data)
 
-
-def calculate_total(eu):
-    total = eu.reading
-    if not (total == 0):
-        eu.add_reading(total)
+    val = pickle.loads(data)
+    eu.add_sums(val)
 
 
 if __name__ == '__main__':
@@ -73,14 +69,11 @@ if __name__ == '__main__':
     print("Server started")
     print("Waiting for client request..")
 
-    while True:
 
-        s.listen(2)
-        conn, addr = s.accept()
-        connections.append(conn)
-        print('Connected to :', addr[0], ':', addr[1])
-        print_lock.acquire()
-        start_new_thread(threaded, (conn, eu))
-        print_lock.release()
-        calculate_total(eu)
-        print("SM totals:", eu.values)
+    s.listen(2)
+    conn, addr = s.accept()
+    connections.append(conn)
+    eu.set_num_aggs(len(connections))
+    print('Connected to :', addr[0], ':', addr[1])
+    for connection in connections:
+        start_new_thread(threaded, (connection, eu))
