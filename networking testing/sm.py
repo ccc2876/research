@@ -61,6 +61,7 @@ def main():
             sm.add_time(single_share_time_end - single_share_time_start)
             print(single_share_time_end - single_share_time_start)
         counter += 1
+    print(sum(secrets))
 
 
 

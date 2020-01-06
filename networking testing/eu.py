@@ -1,9 +1,11 @@
 import socket
 import sys
 import traceback
+import threading
 from ElectricalUtility import ElectricalUtility
 from threading import Thread
 
+print_lock = threading.Lock()
 
 def main():
     start_server()
@@ -38,9 +40,7 @@ def start_server():
             traceback.print_exc()
 
 
-
 def clientThread(connection, eu, ip, port, max_buffer_size=5120):
-    print("new thread")
     sm_num = int(receive_input(connection, max_buffer_size))
     num_aggs = receive_input(connection, max_buffer_size)
     eu.set_num_sm(int(sm_num))
@@ -49,23 +49,24 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
 
     while is_active:
         sm_id = int(receive_input(connection, max_buffer_size))
-
         is_active = False
         id= True
         while id:
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 if client_input == "DONE":
+                    print("here")
                     break
                 print("input:", int(client_input))
+                # print_lock.acquire()
                 eu.add_sums(int(client_input), int(sm_id))
                 print(eu.return_values())
+                # print_lock.release()
                 is_active = True
 
             else:
                 is_active = True
                 id= False
-
 
 
 def receive_input(connection, max_buffer_size):

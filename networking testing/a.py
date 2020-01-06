@@ -37,15 +37,12 @@ def start_server(connections, eu_conn):
 def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120):
     sm_id = receive_input(connection, max_buffer_size)
     time_length = int(receive_input(connection, max_buffer_size))
-    print("sending time", time_length)
     agg_num = int(receive_input(connection, max_buffer_size))
     eu_conn.sendall(str(agg_num).encode("utf-8"))
-    print("send eu the agg num", agg_num)
     aggregator.calculate_lagrange_multiplier(int(agg_num))
     counter = 0
     is_active = True
     shares= True
-    meter_id = 0
     while is_active:
         meter_id = int(sm_id)
         print("sending id to eu of", sm_id)
