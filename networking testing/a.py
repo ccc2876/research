@@ -7,6 +7,9 @@ from numpy import long
 from threading import Thread
 
 
+DELIMITER = "\n"
+
+
 def start_server(connections, eu_conn):
     # set up connection to the smart meters
     TCP_IP = '127.0.0.1'
@@ -15,12 +18,14 @@ def start_server(connections, eu_conn):
     s.bind((TCP_IP, TCP_PORT))
 
     num_smart_meters = 3
-    eu_conn.sendall(str(num_smart_meters).encode("utf-8"))
+    num_smart_meters = str(num_smart_meters)
+    num_smart_meters += DELIMITER
+    eu_conn.sendall(num_smart_meters.encode("utf-8"))
     ID = int(sys.argv[2])
     print(sys.argv[1], " ", sys.argv[2])
-    aggregator = Aggregator(ID, num_smart_meters)
+    aggregator = Aggregator(ID, int(num_smart_meters))
 
-    while len(connections) < num_smart_meters:
+    while len(connections) < int(num_smart_meters):
         s.listen()
         conn, addr = s.accept()
         print('Connected to :', addr[0], ':', addr[1])
@@ -37,7 +42,9 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
     sm_id = receive_input(connection, max_buffer_size)
     time_length = int(receive_input(connection, max_buffer_size))
     agg_num = int(receive_input(connection, max_buffer_size))
-    eu_conn.sendall(str(agg_num).encode("utf-8"))
+    agg_num = str(agg_num) + DELIMITER
+
+    eu_conn.sendall(agg_num.encode("utf-8"))
     aggregator.calculate_lagrange_multiplier(int(agg_num))
     counter = 0
     is_active = True
@@ -45,7 +52,8 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
     while is_active:
         meter_id = int(sm_id)
         print("sending id to eu of", sm_id)
-        eu_conn.sendall(str(meter_id).encode("utf-8"))
+        meter_id = str(meter_id) + DELIMITER
+        eu_conn.sendall(meter_id.encode("utf-8"))
         is_active = False
         while shares:
             client_input = receive_input(connection, max_buffer_size)
@@ -63,9 +71,10 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                 print("Connection " + str(ip) + ":" + str(port) + " closed")
                 val = aggregator.get_sum(meter_id)
                 print(val)
-                eu_conn.sendall(str(val).encode("utf-8"))
+                val = str(val) + DELIMITER
+                eu_conn.sendall(val.encode("utf-8"))
                 time.sleep(1)
-                eu_conn.sendall("done".encode("utf-8"))
+                eu_conn.sendall("done\n".encode("utf-8"))
                 shares = False
 
 

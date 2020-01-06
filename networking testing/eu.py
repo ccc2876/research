@@ -42,8 +42,10 @@ def start_server():
 
 
 def clientThread(connection, eu, ip, port, max_buffer_size=5120):
-    sm_num = int(receive_input(connection, max_buffer_size))
+    sm_num = receive_input(connection, max_buffer_size)
+    sm_num = int(sm_num[0])
     num_aggs = receive_input(connection, max_buffer_size)
+    num_aggs = int(num_aggs[0])
     eu.set_num_sm(int(sm_num))
     eu.set_num_aggs(int(num_aggs))
     is_active = True
@@ -55,7 +57,7 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
         while id:
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
-                if client_input == "DONE":
+                if client_input == "done":
                     is_active = True
                     break
                 print("input:", int(client_input))
@@ -71,13 +73,12 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
 
 def receive_input(connection, max_buffer_size):
     client_input = connection.recv(max_buffer_size)
-
     client_input_size = sys.getsizeof(client_input)
     if client_input_size > max_buffer_size:
         print("The input size is greater than expected {}".format(client_input_size))
-    decoded_input = client_input.decode("utf8").rstrip()
-    result = process_input(decoded_input)
-    return result
+    decoded_input = client_input.decode("utf8").split("\n")
+    # result = process_input(decoded_input)
+    return decoded_input
 
 
 def process_input(input_str):
