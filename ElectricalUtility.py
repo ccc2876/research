@@ -69,7 +69,6 @@ if __name__ == '__main__':
     print("Server started")
     print("Waiting for client request..")
 
-
     s.listen(2)
     conn, addr = s.accept()
     connections.append(conn)

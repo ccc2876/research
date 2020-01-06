@@ -7,6 +7,7 @@ from threading import Thread
 
 print_lock = threading.Lock()
 
+
 def main():
     start_server()
 
@@ -50,27 +51,27 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
     while is_active:
         sm_id = int(receive_input(connection, max_buffer_size))
         is_active = False
-        id= True
+        id = True
         while id:
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 if client_input == "DONE":
-                    print("here")
+                    is_active = True
                     break
                 print("input:", int(client_input))
-                # print_lock.acquire()
                 eu.add_sums(int(client_input), int(sm_id))
                 print(eu.return_values())
-                # print_lock.release()
                 is_active = True
 
             else:
-                is_active = True
-                id= False
+                print("here")
+                is_active = False
+                id = False
 
 
 def receive_input(connection, max_buffer_size):
     client_input = connection.recv(max_buffer_size)
+
     client_input_size = sys.getsizeof(client_input)
     if client_input_size > max_buffer_size:
         print("The input size is greater than expected {}".format(client_input_size))

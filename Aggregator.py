@@ -40,6 +40,7 @@ class Aggregator:
                 top *= -i
                 bottom *= (self.get_ID() - i)
         self.delta_func_multiplier = top / bottom
+        print(self.delta_func_multiplier)
 
 
     def print_shares_list(self):
@@ -120,47 +121,47 @@ def threaded(conn, ag, client, t):
         conn.close()
 
 
-if __name__ == '__main__':
-    # set up connection to the utility company
-    TCP_IP = '127.0.0.1'
-    TCP_PORT = int(sys.argv[1])
-    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client.connect((TCP_IP, TCP_PORT))
-
-    # set up connection to the smart meters
-    TCP_IP = '127.0.0.1'
-    TCP_PORT = int(sys.argv[2])
-    BUFFER_SIZE = 1024
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((TCP_IP, TCP_PORT))
-
-    smart_meter_list = []
-    aggregator_list = []
-    ID = int(sys.argv[3])
-    aggregator = Aggregator(ID)
-    aggregator_list.append(aggregator)
-
-    lcounter = 0
-    for i in range(0, len(aggregator_list)):
-        a = aggregator_list[lcounter]
-        top = ""
-        bottom = 1
-        for a2 in aggregator_list:
-            if not a2.get_ID() == a.get_ID():
-                top += "(x - " + str(a2.get_ID()) + ")"
-                bottom *= (a.get_ID() - a2.get_ID())
-                a.set_lagrange(top + "/" + str(bottom))
-        lcounter += 1
-
-    while True:
-        s.listen()
-        conn, addr = s.accept()
-        print('Connected to :', addr[0], ':', addr[1])
-        smart_meter_list.append(conn)
-        conn.send(pickle.dumps(ID))
-        t = conn.recv(1024)
-        t = pickle.loads(t)
-        print("time", t)
-        start_new_thread(threaded, (conn, aggregator, client, t))
-
+# if __name__ == '__main__':
+#     # set up connection to the utility company
+#     TCP_IP = '127.0.0.1'
+#     TCP_PORT = int(sys.argv[1])
+#     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     client.connect((TCP_IP, TCP_PORT))
+#
+#     # set up connection to the smart meters
+#     TCP_IP = '127.0.0.1'
+#     TCP_PORT = int(sys.argv[2])
+#     BUFFER_SIZE = 1024
+#     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#     s.bind((TCP_IP, TCP_PORT))
+#
+#     smart_meter_list = []
+#     aggregator_list = []
+#     ID = int(sys.argv[3])
+#     aggregator = Aggregator(ID)
+#     aggregator_list.append(aggregator)
+#
+#     lcounter = 0
+#     for i in range(0, len(aggregator_list)):
+#         a = aggregator_list[lcounter]
+#         top = ""
+#         bottom = 1
+#         for a2 in aggregator_list:
+#             if not a2.get_ID() == a.get_ID():
+#                 top += "(x - " + str(a2.get_ID()) + ")"
+#                 bottom *= (a.get_ID() - a2.get_ID())
+#                 a.set_lagrange(top + "/" + str(bottom))
+#         lcounter += 1
+#
+#     while True:
+#         s.listen()
+#         conn, addr = s.accept()
+#         print('Connected to :', addr[0], ':', addr[1])
+#         smart_meter_list.append(conn)
+#         conn.send(pickle.dumps(ID))
+#         t = conn.recv(1024)
+#         t = pickle.loads(t)
+#         print("time", t)
+#         start_new_thread(threaded, (conn, aggregator, client, t))
+#
 

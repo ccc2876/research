@@ -4,6 +4,7 @@ import random
 import time
 from SmartMeter import SmartMeter
 
+
 def main():
     aggregator_IDs = []
     connections = []
@@ -62,10 +63,6 @@ def main():
             print(single_share_time_end - single_share_time_start)
         counter += 1
     print(sum(secrets))
-
-
-
-
 
 
 if __name__ == "__main__":

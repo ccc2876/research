@@ -4,7 +4,6 @@ from Aggregator import Aggregator
 import traceback
 import time
 from numpy import long
-
 from threading import Thread
 
 
@@ -42,7 +41,7 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
     aggregator.calculate_lagrange_multiplier(int(agg_num))
     counter = 0
     is_active = True
-    shares= True
+    shares = True
     while is_active:
         meter_id = int(sm_id)
         print("sending id to eu of", sm_id)
