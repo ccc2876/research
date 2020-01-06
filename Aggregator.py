@@ -40,7 +40,7 @@ class Aggregator:
                 top *= -i
                 bottom *= (self.get_ID() - i)
         self.delta_func_multiplier = top / bottom
-        print(self.delta_func_multiplier)
+
 
     def print_shares_list(self):
         """
