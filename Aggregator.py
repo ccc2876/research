@@ -1,9 +1,4 @@
-from _thread import *
-import socket
-import pickle
-from numpy import long
-import sys
-
+__author__ = "Claire Casalnova"
 
 class Aggregator:
     """
@@ -40,7 +35,6 @@ class Aggregator:
                 top *= -i
                 bottom *= (self.get_ID() - i)
         self.delta_func_multiplier = top / bottom
-        print(self.delta_func_multiplier)
 
 
     def print_shares_list(self):
@@ -82,10 +76,25 @@ class Aggregator:
         return self.delta_func_multiplier
 
     def append_shares(self, share, sm_id):
+        """
+        put the share value in the correct location corresponding to the smart meter id
+        :param share: the share that was sent
+        :param sm_id: the id of the smart meter
+        """
         self.shares_list[int(sm_id)-1] += share
 
     def calc_sum(self,value, sm_id):
+        """
+        calculate the sum of the shares that were sent by adding the value
+        :param value: the value that corresponds to the share multiplied by the delta func multiplier of the agg
+        :param sm_id: the smart meter id
+        """
         self.sumofshares[sm_id-1] += value
 
     def get_sum(self, sm_id):
+        """
+        return the sum of the shares based on the passed smart meter id
+        :param sm_id: the id of the smart meter
+        :return: the sum of the shares
+        """
         return self.sumofshares[sm_id-1]

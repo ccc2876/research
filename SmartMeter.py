@@ -22,9 +22,17 @@ class SmartMeter:
         self.times_list = []
 
     def set_id(self, ID):
+        """
+        set the ID var
+        :param ID: the ID of the smart meter
+        """
         self.ID = ID
 
     def set_degree(self, deg):
+        """
+        set the degree variable
+        :param deg: the degree of the polynomial
+        """
         self.degree = deg
 
     def set_polynomial(self, poly):
@@ -37,7 +45,7 @@ class SmartMeter:
     def set_coeff_list(self, coeff_list):
         """
         was used for testing of a predetermined polynomial
-        :param list: the coefficients of the polynomial
+        :param coeff_list: the coefficients of the polynomial
         """
 
         self.coeff_list = coeff_list
@@ -101,7 +109,6 @@ class SmartMeter:
         :param aggregator: the aggregator that this share is being sent to
         """
         length = len(self.coeff_list)
-
         power = self.degree
         value = 0
         for i in range(0, length):
@@ -112,12 +119,21 @@ class SmartMeter:
         return value
 
     def get_shares_list(self):
+        """
+        return the shares list as a string
+        :return: the list of shares
+        """
         return str(self.shares_list)
 
     def add_time(self, value):
+        """
+        append the length of time it took to send a share to the list
+        :param value: the time it took to send the share
+        """
         self.times_list.append(value)
 
     def get_time(self):
+        """
+        print the list of times
+        """
         print(self.times_list)
-
-

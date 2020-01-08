@@ -1,3 +1,5 @@
+__author__ = "Claire Casalnova"
+
 import socket
 import sys
 import random
@@ -6,9 +8,11 @@ from SmartMeter import SmartMeter
 
 
 def main():
+
+    # set up preprocess information
     aggregator_IDs = []
     connections = []
-    time_length = 1
+    time_length = 20
     num_aggs = 2
 
     # set up the smart meter object
@@ -28,11 +32,12 @@ def main():
         print("Connection Error")
         sys.exit()
 
+    # receive aggregator ID information from the Aggregators
     for conn in connections:
         agg_id = int(conn.recv(5120).decode("utf8"))
         aggregator_IDs.append(agg_id)
 
-    print(aggregator_IDs)
+    # send the id of the smart meter, the time period and the num of aggs to the aggregators
     for conn in connections:
         conn.sendall(str(sm.get_ID()).encode("utf-8"))
         time.sleep(1)
@@ -42,17 +47,18 @@ def main():
 
     counter = 0
     secrets = []
+    # set the degree based on number of aggregators
     sm.set_degree(len(aggregator_IDs) - 1)
 
-
+    # loop over the time instances
     while counter < time_length:
-        constants = []
         secret = random.randint(1, 5)
         sm.set_secret(secret)
         secrets.append(secret)
         sm.create_polynomial()
         shares = []
 
+        # send the shares to the aggregators and record the amount of time that it took
         for i in range(0, len(connections)):
             conn = connections[i]
             agg_id = aggregator_IDs[i]
@@ -65,7 +71,6 @@ def main():
             print(single_share_time_end - single_share_time_start)
         counter += 1
     print(sum(secrets))
-
 
 
 if __name__ == "__main__":
