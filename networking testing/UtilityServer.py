@@ -50,7 +50,6 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
 
     while is_active:
         input = receive_input(connection, max_buffer_size)
-        print(input)
         if input:
             num_aggs = int(input[0])
             sm_id = int(input[1])
@@ -58,8 +57,8 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
             eu.set_num_aggs(int(num_aggs))
             eu.add_sums(value, sm_id)
             print(eu.return_values())
-        if not connection:
-            break
+
+
 
 
 
@@ -68,7 +67,6 @@ def receive_input(connection, max_buffer_size):
     client_input_size = sys.getsizeof(client_input)
     if client_input_size > max_buffer_size:
         print("The input size is greater than expected {}".format(client_input_size))
-    print(client_input.decode("utf8"))
     decoded_input = client_input.decode("utf8").split(DELIMITER)
     return decoded_input
 

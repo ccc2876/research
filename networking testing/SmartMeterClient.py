@@ -13,7 +13,7 @@ def main():
 
     # set up the smart meter object
     sm = SmartMeter()
-    sm.set_id(1)
+    sm.set_id(int(sys.argv[1]))
 
     for i in range(0, num_aggs):
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

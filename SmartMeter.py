@@ -1,7 +1,4 @@
 import random
-import socket
-import pickle
-import time
 
 
 class SmartMeter:
@@ -37,13 +34,13 @@ class SmartMeter:
         """
         self.polynomial = poly
 
-    def set_coeff_list(self, list):
+    def set_coeff_list(self, coeff_list):
         """
         was used for testing of a predetermined polynomial
         :param list: the coefficients of the polynomial
         """
 
-        self.coeff_list = list
+        self.coeff_list = coeff_list
 
     def get_ID(self):
         """
@@ -124,57 +121,3 @@ class SmartMeter:
         print(self.times_list)
 
 
-# if __name__ == '__main__':
-#     TCP_IP = '127.0.0.1'
-#     TCP_PORT1 = 5006
-#     TCP_PORT2 = 5007
-#     BUFFER_SIZE = 1024
-#     connections = []
-#     s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#     s1.connect((TCP_IP, TCP_PORT1))
-#     connections.append(s1)
-#     s2.connect((TCP_IP, TCP_PORT2))
-#     connections.append(s2)
-#     t = 9
-#     s1.send(pickle.dumps(t))
-#     s2.send(pickle.dumps(t))
-#     aggregator_IDs = []
-#     d1 = s1.recv(1024)
-#     d2 = s2.recv(1024)
-#     d1 = pickle.loads(d1)
-#     d2 = pickle.loads(d2)
-#     aggregator_IDs.append(d1)
-#     aggregator_IDs.append(d2)
-#     data = pickle.dumps(aggregator_IDs)
-#     s1.send(data)
-#     s2.send(data)
-#     secrets = []
-#
-#     for t in range(0, 9):
-#         print("Time Instance #", t)
-#         constants = []
-#         secret = random.randint(1, 5)
-#         sm = SmartMeter()
-#         sm.set_id(1)
-#         sm.set_degree(len(aggregator_IDs) - 1)
-#         sm.set_secret(secret)
-#         secrets.append(secret)
-#         sm.create_polynomial()
-#         counter = 0
-#         shares = []
-#         for id in aggregator_IDs:
-#             single_share_time_start = time.time()
-#             val = sm.create_shares(id)
-#             shares.append(val)
-#             connections[counter].send(pickle.dumps(val))
-#             single_share_time_end = time.time()
-#             sm.add_time(single_share_time_end - single_share_time_start)
-#             print(single_share_time_end - single_share_time_start)
-#             counter += 1
-#         print("Shares for smart meter: ", shares)
-#     print(sum(secrets))
-#
-#     for conn in connections:
-#         conn.close()
-#
