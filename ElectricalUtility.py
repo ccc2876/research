@@ -1,23 +1,48 @@
+__author__ = "Claire Casalnova"
+
+
 class ElectricalUtility:
     """
     class for the electrical utility company
     includes a list of the values that the EU is sent at each time instance
-    these values are comprised of the total of the secrets from the smart meteres
+    these values are comprised of the total of the secrets from the smart meters
     """
 
     def __init__(self):
+        """
+        values- corresponds to the readings from specified smart meters
+        num_aggregators - the number of aggregators in the network
+        smart_meter_num - the number of smart meters in the network
+        """
         self.values = []
+        self.num_aggregators = 0
+        self.smart_meter_num = 0
 
-    def add_reading(self, value):
+    def set_num_aggs(self, num):
         """
-        adds a new value to the list
-        :param value: the total consumption from all of the smart meters combined
+        sets the num_aggregators in the network
+        :param num: the number of aggs
         """
-        self.values.append(value)
+        self.num_aggregators = num
+
+    def set_num_sm(self, num):
+        """
+        set the number of smart meters var and create the values array to be that length
+        :param num: number of smart meters
+        """
+        self.smart_meter_num = num
+        self.values = [0] * self.smart_meter_num
+
+    def add_sums(self, x, sm_id):
+        """
+        append the reading to the correct location in the array
+        :param x: the reading from the aggregators
+        :param sm_id: the smart meter that the reading comes from
+        """
+        self.values[int(sm_id) - 1] += x
 
     def return_values(self):
         """
         prints the list of values
         """
         return self.values
-

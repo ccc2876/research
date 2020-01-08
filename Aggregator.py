@@ -1,12 +1,6 @@
-import socket
-from _thread import *
-import threading
-
-print_lock = threading.Lock()
-
+__author__ = "Claire Casalnova"
 
 class Aggregator:
-
     """
     Aggregator class attributes
     ID -- the ID that corresponds to the aggregators
@@ -17,13 +11,14 @@ class Aggregator:
     delta_func_multiplier -- the delta function multiplier which is made using lagrange interpolation
     """
 
-    def __init__(self, ID):
+    def __init__(self, ID, num_smart_meters):
         self.ID = ID
-        self.shares_list = []
-        self.current_total = 0
-        self.total = 0
+        self.shares_list = [0] * num_smart_meters
+        self.current_total = [0] * num_smart_meters
+        self.total = [0] * num_smart_meters
         self.delta_func_multiplier = 0
         self.lagrange = ""
+        self.sumofshares= [0] * num_smart_meters
 
     def set_lagrange(self, equation):
         self.lagrange = equation
@@ -37,10 +32,10 @@ class Aggregator:
         bottom = 1
         for i in range(1, num_aggregators + 1):
             if i != self.get_ID():
-                top *= i
+                top *= -i
                 bottom *= (self.get_ID() - i)
-
         self.delta_func_multiplier = top / bottom
+
 
     def print_shares_list(self):
         """
@@ -58,21 +53,21 @@ class Aggregator:
         """
         return self.ID
 
-    def update_totals(self):
+    def update_totals(self, sm_id):
         """
         updates the totals that the aggregator holds
         total is the total combined shares from all time instances and aggregators
         current total is the total from the most recent set of shares
         """
-        temp = self.total
-        self.total = sum(self.shares_list)
-        self.current_total = self.total - temp
+        temp = self.total[sm_id-1]
+        self.total[sm_id-1] = self.shares_list[sm_id-1]
+        self.current_total[sm_id-1] = self.total[sm_id-1] - temp
 
-    def get_current_total(self):
+    def get_current_total(self, sm_id):
         """
         :return: the current total of the shares that were most recently sent
         """
-        return self.current_total
+        return self.current_total[sm_id-1]
 
     def get_lagrange_multiplier(self):
         """
@@ -80,53 +75,26 @@ class Aggregator:
         """
         return self.delta_func_multiplier
 
-    def bytes_to_int(self, bytes):
-        result = 0
-        for b in bytes:
-            result = result * 256 + int(b)
-        return result
+    def append_shares(self, share, sm_id):
+        """
+        put the share value in the correct location corresponding to the smart meter id
+        :param share: the share that was sent
+        :param sm_id: the id of the smart meter
+        """
+        self.shares_list[int(sm_id)-1] += share
 
-    def threaded(self,conn):
-        while True:
-            data = conn.recv(1024)
-            if not data:
-                print_lock.release()
-                break
+    def calc_sum(self,value, sm_id):
+        """
+        calculate the sum of the shares that were sent by adding the value
+        :param value: the value that corresponds to the share multiplied by the delta func multiplier of the agg
+        :param sm_id: the smart meter id
+        """
+        self.sumofshares[sm_id-1] += value
 
-            data=data.decode()
-            print(data)
-
-        conn.close()
-
-if __name__ == "__main__":
-    TCP_IP = '127.0.0.1'
-    TCP_PORT = 5006
-    BUFFER_SIZE = 20  # Normally 1024, but we want fast response
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.bind((TCP_IP, TCP_PORT))
-    s.listen(1)
-    aggregator_list = []
-    smart_meter_list = []
-    aggregator = Aggregator(1)
-    aggregator_list.append(aggregator)
-    counter = 0
-    for i in range(0, len(aggregator_list)):
-        a = aggregator_list[counter]
-        top = ""
-        bottom = 1
-        for a2 in aggregator_list:
-            if not a2.get_ID() == a.get_ID():
-                top += "(x - " + str(a2.get_ID()) + ")"
-                bottom *= (a.get_ID() - a2.get_ID())
-                a.set_lagrange(top + "/" + str(bottom))
-        counter += 1
-    while True:
-        conn, addr = s.accept()
-        print_lock.acquire()
-        print('Connected to :', addr[0], ':', addr[1])
-        start_new_thread(aggregator.threaded, (conn,))
-
-
-
-
-
+    def get_sum(self, sm_id):
+        """
+        return the sum of the shares based on the passed smart meter id
+        :param sm_id: the id of the smart meter
+        :return: the sum of the shares
+        """
+        return self.sumofshares[sm_id-1]

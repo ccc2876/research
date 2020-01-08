@@ -1,5 +1,4 @@
 import random
-import socket
 
 
 class SmartMeter:
@@ -13,14 +12,28 @@ class SmartMeter:
     shares_list -- holds the shares that this smart meter created
     """
 
-    def __init__(self, ID, degree):
-        self.ID = ID
-        self.degree = degree
+    def __init__(self):
+        self.ID = 0
+        self.degree = 0
         self.secret = 0
         self.polynomial = ""
         self.coeff_list = []
         self.shares_list = []
-        self.times_list=[]
+        self.times_list = []
+
+    def set_id(self, ID):
+        """
+        set the ID var
+        :param ID: the ID of the smart meter
+        """
+        self.ID = ID
+
+    def set_degree(self, deg):
+        """
+        set the degree variable
+        :param deg: the degree of the polynomial
+        """
+        self.degree = deg
 
     def set_polynomial(self, poly):
         """
@@ -29,13 +42,13 @@ class SmartMeter:
         """
         self.polynomial = poly
 
-    def set_coeff_list(self, list):
+    def set_coeff_list(self, coeff_list):
         """
         was used for testing of a predetermined polynomial
-        :param list: the coefficients of the polynomial
+        :param coeff_list: the coefficients of the polynomial
         """
 
-        self.coeff_list = list
+        self.coeff_list = coeff_list
 
     def get_ID(self):
         """
@@ -85,8 +98,9 @@ class SmartMeter:
         # add the secret to the end of the polynomial as the constant
         polystring += str(self.secret)
         self.polynomial = polystring
+        print(self.polynomial)
 
-    def create_shares(self, aggregator):
+    def create_shares(self, aggregator_ID):
         """
         generates the shares from this smart meter
         using the polynomial that belongs to this smart meter the ID value of the aggregator that is passed in
@@ -95,44 +109,31 @@ class SmartMeter:
         :param aggregator: the aggregator that this share is being sent to
         """
         length = len(self.coeff_list)
-
         power = self.degree
         value = 0
         for i in range(0, length):
-            value += self.coeff_list[i] * (aggregator.get_ID() ** power)
+            value += self.coeff_list[i] * (aggregator_ID ** power)
             power -= 1
         value += self.secret
         self.shares_list.append(value)
-
-        #UPDATE THIS TO BE DONE IN SERVER
-        if len(aggregator.shares_list) == self.ID - 1:
-            aggregator.shares_list.append(value)
-        else:
-            aggregator.shares_list[self.ID - 1] += value
+        return value
 
     def get_shares_list(self):
+        """
+        return the shares list as a string
+        :return: the list of shares
+        """
         return str(self.shares_list)
 
     def add_time(self, value):
+        """
+        append the length of time it took to send a share to the list
+        :param value: the time it took to send the share
+        """
         self.times_list.append(value)
 
     def get_time(self):
+        """
+        print the list of times
+        """
         print(self.times_list)
-
-
-if __name__ == "__main__":
-    TCP_IP = '127.0.0.1'
-    TCP_PORT1 = 5005
-    TCP_PORT2 = 5006
-    BUFFER_SIZE = 1024
-    secret = random.randint(1, 5)
-    sm=SmartMeter(1,2)
-    sm.set_secret(secret)
-    print(secret)
-    s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s1.connect((TCP_IP, TCP_PORT1))
-    s2.connect((TCP_IP, TCP_PORT2))
-    s1.send(str(secret).encode('utf8'))
-    s2.send(str(secret).encode('utf8'))
-

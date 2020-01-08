@@ -6,7 +6,6 @@ from Aggregator import Aggregator
 from SmartMeter import SmartMeter
 from numpy import long
 
-
 if __name__ == '__main__':
     # initializes the electrical utility
     eu = ElectricalUtility()
@@ -18,11 +17,12 @@ if __name__ == '__main__':
             time_instances = int(line[0])
             aggregators = int(line[1])
             sm_num = int(line[2])
-            if time_instances < 1 or aggregators < 1 or sm_num <1:
+            if time_instances < 1 or aggregators < 1 or sm_num < 1:
                 print("invalid input file, please retry")
                 exit(1)
 
-    with open("outputfiles/" + "T" + str(time_instances) + "A" + str(aggregators) + "S" + str(sm_num) + ".txt", "w") as out:
+    with open("outputfiles/" + "T" + str(time_instances) + "A" + str(aggregators) + "S" + str(sm_num) + ".txt",
+              "w") as out:
         aggregator_list = []
         smart_meter_list = []
 
@@ -81,7 +81,7 @@ if __name__ == '__main__':
                     single_share_time_start = time.time()
                     sm.create_shares(aggregator)
                     single_share_time_end = time.time()
-                    sm.add_time(single_share_time_end- single_share_time_start)
+                    sm.add_time(single_share_time_end - single_share_time_start)
 
                 sm.get_time()
 
@@ -117,5 +117,5 @@ if __name__ == '__main__':
                 out.write("%d" % e)
                 out.write("\n")
             out.write("\n")
-            print(end-start)
+            print(end - start)
             print(secret_total)
