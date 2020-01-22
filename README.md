@@ -17,12 +17,12 @@ Usage
 3.	Set up a VM for 3 Smart Meters
 4.	Run the Electrical Utility Company
 5.	Run each of the VMs for the Aggregators with the corresponding command line arguments
-a.	Aggregator 1: 8001 1
-b.	Aggregator 2: 8002 2
+      a.	 Aggregator 1: 8001 1
+      b.	Aggregator 2: 8002 2
 6.	Run each of the Smart Meters with corresponding command line arguments
-a.	Smart Meter 1: 1
-b.	Smart Meter 2: 2
-c.	Smart Meter 3: 3
+      a.	Smart Meter 1: 1
+      b.	Smart Meter 2: 2
+      c.	Smart Meter 3: 3
 
 Note for set up the IP address in the code must reflect the IP addresses of the VMs that the code is being run in.
 
