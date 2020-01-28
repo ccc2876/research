@@ -67,13 +67,18 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
         if client_input:
             num_aggs = int(client_input[0])
             sm_id = int(client_input[1])
-            value = int(client_input[2])
-            eu.set_num_aggs(int(num_aggs))
-            print_lock.acquire()
-            eu.add_sums(value)
-            print(eu.return_values())
-            print_lock.release()
+            bill_boolean = int(client_input[2])
 
+            if bill_boolean == 1:
+                eu.generate_bill()
+                break
+            else:
+                value = int(client_input[3])
+                eu.set_num_aggs(int(num_aggs))
+                print_lock.acquire()
+                eu.set_spatial_sum(value)
+                print(eu.get_spatial_sum())
+                print_lock.release()
 
 def receive_input(connection, max_buffer_size):
     """

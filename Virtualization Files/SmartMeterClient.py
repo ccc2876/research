@@ -62,7 +62,7 @@ def main():
 
     # loop over the time instances
     while counter < num_time_instances:
-        print("here")
+        print("Generating secret...")
         secret = random.randint(1, max_time_consumption)
         sm.set_secret(secret)
         secrets.append(secret)

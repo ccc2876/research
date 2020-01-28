@@ -1,5 +1,7 @@
 __author__ = "Claire Casalnova"
 
+
+
 class Aggregator:
     """
     Aggregator class attributes
@@ -13,12 +15,34 @@ class Aggregator:
 
     def __init__(self, ID, num_smart_meters):
         self.ID = ID
+        self.billing_dict = dict()
+        for i in range(1,num_smart_meters+1):
+            self.billing_dict[i] = 0
+        self.spatial_counter = 0
         self.shares_list = 0
         self.current_total = 0
         self.total = 0
         self.delta_func_multiplier = 0
         self.lagrange = ""
         self.sumofshares= 0
+
+
+    def update_billing_counters(self,value,meter_id):
+        self.billing_dict[meter_id] = value
+        print("billing for ", meter_id, ":", self.billing_dict)
+
+    def update_spatial_counter(self,value):
+        self.spatial_counter += value
+        print("spatial counter: ", self.spatial_counter)
+
+    def get_spatial_total(self):
+        return self.spatial_counter
+
+    def reset_spatial(self):
+        self.spatial_counter = 0
+
+    def calculate_delta(self):
+        return int(self.spatial_counter * self.delta_func_multiplier)
 
     def set_lagrange(self, equation):
         self.lagrange = equation

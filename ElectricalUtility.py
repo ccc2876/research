@@ -14,9 +14,18 @@ class ElectricalUtility:
         num_aggregators - the number of aggregators in the network
         smart_meter_num - the number of smart meters in the network
         """
-        self.value = 0
+        self.spatial_sum = 0
         self.num_aggregators = 0
         self.smart_meter_num = 0
+
+    def set_spatial_sum(self, value):
+        self.spatial_sum += value
+
+    def get_spatial_sum(self):
+        return self.spatial_sum
+
+    def generate_bill(self):
+        print("bill")
 
     def set_num_aggs(self, num):
         """
