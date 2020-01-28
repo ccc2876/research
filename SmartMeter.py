@@ -20,6 +20,11 @@ class SmartMeter:
         self.coeff_list = []
         self.shares_list = []
         self.times_list = []
+        self.zp_space = 0
+
+    def set_zp_space(self, zp):
+        self.zp_space=zp
+
 
     def set_id(self, ID):
         """
@@ -69,7 +74,7 @@ class SmartMeter:
         """
         self.secret = secret
 
-    def create_polynomial(self):
+    def create_polynomial(self, max_coeff):
         """
         function to create a polynomial at each time instance for a smart meter
         creates a random string of bits to determine the powers of x in the polynomial
@@ -88,7 +93,7 @@ class SmartMeter:
         # loop over the binary string and generate the coefficients
         for i in range(0, len(bit_string)):
             if bit_string[i] == 1:
-                coeff = random.randint(1, 10)
+                coeff = random.randint(1, max_coeff)
                 polystring += str(coeff) + "x^" + str(power) + "+"
                 self.coeff_list.append(coeff)
             else:

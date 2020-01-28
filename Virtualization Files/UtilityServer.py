@@ -4,11 +4,11 @@ import socket
 import sys
 import traceback
 from ElectricalUtility import ElectricalUtility
-from threading import Thread
+from threading import Thread,Lock
 
 
 DELIMITER = "\n"
-
+print_lock = Lock()
 
 def main():
     start_server()
@@ -69,8 +69,10 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
             sm_id = int(client_input[1])
             value = int(client_input[2])
             eu.set_num_aggs(int(num_aggs))
-            eu.add_sums(value, sm_id)
+            print_lock.acquire()
+            eu.add_sums(value)
             print(eu.return_values())
+            print_lock.release()
 
 
 def receive_input(connection, max_buffer_size):

@@ -13,12 +13,12 @@ class Aggregator:
 
     def __init__(self, ID, num_smart_meters):
         self.ID = ID
-        self.shares_list = [0] * num_smart_meters
-        self.current_total = [0] * num_smart_meters
-        self.total = [0] * num_smart_meters
+        self.shares_list = 0
+        self.current_total = 0
+        self.total = 0
         self.delta_func_multiplier = 0
         self.lagrange = ""
-        self.sumofshares= [0] * num_smart_meters
+        self.sumofshares= 0
 
     def set_lagrange(self, equation):
         self.lagrange = equation
@@ -53,21 +53,22 @@ class Aggregator:
         """
         return self.ID
 
-    def update_totals(self, sm_id):
+    def update_totals(self,val):
         """
         updates the totals that the aggregator holds
         total is the total combined shares from all time instances and aggregators
         current total is the total from the most recent set of shares
-        """
-        temp = self.total[sm_id-1]
-        self.total[sm_id-1] = self.shares_list[sm_id-1]
-        self.current_total[sm_id-1] = self.total[sm_id-1] - temp
 
-    def get_current_total(self, sm_id):
+        """
+        temp = self.total
+        self.total += val
+        self.current_total = self.total - temp
+
+    def get_current_total(self):
         """
         :return: the current total of the shares that were most recently sent
         """
-        return self.current_total[sm_id-1]
+        return self.current_total
 
     def get_lagrange_multiplier(self):
         """
@@ -75,26 +76,26 @@ class Aggregator:
         """
         return self.delta_func_multiplier
 
-    def append_shares(self, share, sm_id):
+    def append_shares(self, share):
         """
         put the share value in the correct location corresponding to the smart meter id
         :param share: the share that was sent
         :param sm_id: the id of the smart meter
         """
-        self.shares_list[int(sm_id)-1] += share
+        self.shares_list += share
 
-    def calc_sum(self,value, sm_id):
+    def calc_sum(self, value):
         """
         calculate the sum of the shares that were sent by adding the value
         :param value: the value that corresponds to the share multiplied by the delta func multiplier of the agg
         :param sm_id: the smart meter id
         """
-        self.sumofshares[sm_id-1] += value
+        self.sumofshares += value
 
-    def get_sum(self, sm_id):
+    def get_sum(self):
         """
         return the sum of the shares based on the passed smart meter id
         :param sm_id: the id of the smart meter
         :return: the sum of the shares
         """
-        return self.sumofshares[sm_id-1]
+        return self.current_total

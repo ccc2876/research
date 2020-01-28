@@ -12,18 +12,25 @@ def main():
     # set up preprocess information
     aggregator_IDs = []
     connections = []
-    time_length = 20
-    num_aggs = 2
+    num_aggs = 3
+    max_time_consumption = 10
+    max_coefficient = 4
+    max_agg_id = 3
+    num_time_instances = 1
+    max_total_consumption = num_time_instances * max_time_consumption
+    zp_space = max_total_consumption * 100
 
     # set up the smart meter object
     sm = SmartMeter()
     sm.set_id(int(sys.argv[1]))
+    sm.set_zp_space(zp_space)
 
     for i in range(0, num_aggs):
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         connections.append(soc)
     host = "127.0.0.1"
     port = 8001
+
     try:
         for conn in connections:
             conn.connect((host, port))
@@ -41,9 +48,12 @@ def main():
     for conn in connections:
         conn.sendall(str(sm.get_ID()).encode("utf-8"))
         time.sleep(1)
-        conn.sendall(str(time_length).encode("utf-8"))
+        conn.sendall(str(num_time_instances).encode("utf-8"))
         time.sleep(1)
         conn.sendall(str(len(aggregator_IDs)).encode("utf-8"))
+        time.sleep(1)
+        conn.sendall(str(zp_space).encode("utf-8"))
+        time.sleep(1)
 
     counter = 0
     secrets = []
@@ -51,11 +61,12 @@ def main():
     sm.set_degree(len(aggregator_IDs) - 1)
 
     # loop over the time instances
-    while counter < time_length:
-        secret = random.randint(1, 5)
+    while counter < num_time_instances:
+        print("here")
+        secret = random.randint(1, max_time_consumption)
         sm.set_secret(secret)
         secrets.append(secret)
-        sm.create_polynomial()
+        sm.create_polynomial(max_coefficient)
         shares = []
 
         # send the shares to the aggregators and record the amount of time that it took
@@ -65,6 +76,8 @@ def main():
             single_share_time_start = time.time()
             val = sm.create_shares(agg_id)
             shares.append(val)
+            val = val % zp_space
+            print("sending val:", val)
             conn.sendall(str(val).encode("utf8"))
             single_share_time_end = time.time()
             sm.add_time(single_share_time_end - single_share_time_start)

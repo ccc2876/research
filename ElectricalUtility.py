@@ -14,7 +14,7 @@ class ElectricalUtility:
         num_aggregators - the number of aggregators in the network
         smart_meter_num - the number of smart meters in the network
         """
-        self.values = []
+        self.value = 0
         self.num_aggregators = 0
         self.smart_meter_num = 0
 
@@ -31,18 +31,19 @@ class ElectricalUtility:
         :param num: number of smart meters
         """
         self.smart_meter_num = num
-        self.values = [0] * self.smart_meter_num
 
-    def add_sums(self, x, sm_id):
+
+    def add_sums(self, x):
         """
         append the reading to the correct location in the array
         :param x: the reading from the aggregators
         :param sm_id: the smart meter that the reading comes from
         """
-        self.values[int(sm_id) - 1] += x
+        print("value:", self.value, "x:", x)
+        self.value += x
 
     def return_values(self):
         """
         prints the list of values
         """
-        return self.values
+        return self.value
