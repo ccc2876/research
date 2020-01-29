@@ -16,9 +16,12 @@ class Aggregator:
     def __init__(self, ID, num_smart_meters):
         self.ID = ID
         self.billing_dict = dict()
+        self.num_sm = num_smart_meters
         for i in range(1,num_smart_meters+1):
             self.billing_dict[i] = 0
         self.spatial_counter = 0
+
+        self.bill_results = [0] * num_smart_meters
         self.shares_list = 0
         self.current_total = 0
         self.total = 0
@@ -26,14 +29,12 @@ class Aggregator:
         self.lagrange = ""
         self.sumofshares= 0
 
-
     def update_billing_counters(self,value,meter_id):
         self.billing_dict[meter_id] = value
-        print("billing for ", meter_id, ":", self.billing_dict)
+        print(self.billing_dict)
 
     def update_spatial_counter(self,value):
         self.spatial_counter += value
-        print("spatial counter: ", self.spatial_counter)
 
     def get_spatial_total(self):
         return self.spatial_counter
@@ -41,11 +42,31 @@ class Aggregator:
     def reset_spatial(self):
         self.spatial_counter = 0
 
+    def get_billing_amount(self, num):
+        amount = 0
+        # mult = int(self.calc_billing_lagrange(num))
+        print("num:", num)
+        mult = self.delta_func_multiplier
+        print("mult: ", mult)
+        print(self.billing_dict[num])
+        amount += mult * int(self.billing_dict[num])
+        print("billing amount", amount)
+        return int(amount)
+
     def calculate_delta(self):
         return int(self.spatial_counter * self.delta_func_multiplier)
 
     def set_lagrange(self, equation):
         self.lagrange = equation
+
+    def calc_billing_lagrange(self, num):
+        top = 1
+        bottom = 1
+        for i in range(1, self.num_sm + 1):
+            if i != num:
+                top *= -i
+                bottom *= (num - i)
+        return top / bottom
 
     def calculate_lagrange_multiplier(self, num_aggregators):
         """
@@ -61,15 +82,6 @@ class Aggregator:
         self.delta_func_multiplier = top / bottom
 
 
-    def print_shares_list(self):
-        """
-        :return: a string of the list of shares that the aggregator has received
-        """
-        shares = ""
-        for s in self.shares_list:
-            shares += str(s)
-            shares += " "
-        return shares
 
     def get_ID(self):
         """
@@ -77,16 +89,7 @@ class Aggregator:
         """
         return self.ID
 
-    def update_totals(self,val):
-        """
-        updates the totals that the aggregator holds
-        total is the total combined shares from all time instances and aggregators
-        current total is the total from the most recent set of shares
 
-        """
-        temp = self.total
-        self.total += val
-        self.current_total = self.total - temp
 
     def get_current_total(self):
         """

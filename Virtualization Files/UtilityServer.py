@@ -64,13 +64,15 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
     while is_active:
         # receive the input from the aggregators and process it in the utility company object
         client_input = receive_input(connection, max_buffer_size)
+        print("receiving...", client_input)
         if client_input:
             num_aggs = int(client_input[0])
             sm_id = int(client_input[1])
             bill_boolean = int(client_input[2])
 
             if bill_boolean == 1:
-                eu.generate_bill()
+                print("bill amount:", int(client_input[3]))
+                eu.generate_bill(sm_id, int(client_input[3]))
                 break
             else:
                 value = int(client_input[3])

@@ -17,6 +17,7 @@ class ElectricalUtility:
         self.spatial_sum = 0
         self.num_aggregators = 0
         self.smart_meter_num = 0
+        self.price_per_unit = 10
 
     def set_spatial_sum(self, value):
         self.spatial_sum += value
@@ -24,8 +25,9 @@ class ElectricalUtility:
     def get_spatial_sum(self):
         return self.spatial_sum
 
-    def generate_bill(self):
-        print("bill")
+    def generate_bill(self, smart_meter, amount):
+        print(smart_meter, amount * self.price_per_unit)
+
 
     def set_num_aggs(self, num):
         """

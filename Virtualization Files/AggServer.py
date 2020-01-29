@@ -55,40 +55,28 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
     time_length = int(receive_input(connection, max_buffer_size))
     agg_num = int(receive_input(connection, max_buffer_size))
     zp_space = int(receive_input(connection, max_buffer_size))
-    print("zp:", zp_space)
 
     aggregator.calculate_lagrange_multiplier(int(agg_num))
-    counter = 0
     is_active = True
     shares = True
-
+    counter = 0
     while is_active:
         meter_id = int(sm_id)
         meter_id = str(meter_id) + DELIMITER
         meter_id = int(meter_id.strip(DELIMITER))
 
         is_active = False
-        sum = 0
         while shares:
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 print("Processed share: {}".format(client_input))
                 aggregator.update_billing_counters(int(client_input), meter_id)
                 aggregator.update_spatial_counter(int(client_input))
-
                 constant = long(aggregator.get_spatial_total()) * long(aggregator.get_lagrange_multiplier())
                 aggregator.calc_sum(constant)
-                counter += 1
-                if counter >= time_length:
-                    shares = False
-                    sending_string = str(agg_num) + DELIMITER
-                    sending_string += str(meter_id) + DELIMITER
-                    sending_string += str(1) + DELIMITER
-                    sending_string += "done\n"
-                    eu_conn.sendall(sending_string.encode("utf-8"))
-                    break
 
             else:
+                # Send final spatial info to the electrical utility company
                 connection.close()
                 print("Connection " + str(ip) + ":" + str(port) + " closed")
                 sending_string = str(agg_num) + DELIMITER
@@ -99,10 +87,21 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                 sending_string += val
                 sending_string += "done\n"
                 eu_conn.sendall(sending_string.encode("utf-8"))
-                counter += 1
                 aggregator.reset_spatial()
+                counter += 1
+                print(counter)
 
-                shares = False
+                # if end of the time cycle send the billing data
+                if counter >= time_length:
+                    shares = False
+                    sending_string = str(agg_num) + DELIMITER
+                    sending_string += str(meter_id) + DELIMITER
+                    sending_string += str(1) + DELIMITER
+                    sending_string += str(aggregator.get_billing_amount(agg_num)) + DELIMITER
+                    sending_string += "done\n"
+                    eu_conn.sendall(sending_string.encode("utf-8"))
+                    break
+
 
         # eu_conn.sendall("generate".encode("utf-8"))
 
