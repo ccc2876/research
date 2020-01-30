@@ -18,6 +18,7 @@ class ElectricalUtility:
         self.num_aggregators = 0
         self.smart_meter_num = 0
         self.price_per_unit = 10
+        self.aggregators = []
 
     def set_spatial_sum(self, value):
         self.spatial_sum += value
@@ -35,6 +36,8 @@ class ElectricalUtility:
         :param num: the number of aggs
         """
         self.num_aggregators = num
+    def get_num_aggs(self):
+        return self.num_aggregators
 
     def set_num_sm(self, num):
         """

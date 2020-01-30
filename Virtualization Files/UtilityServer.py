@@ -9,6 +9,7 @@ from threading import Thread,Lock
 
 DELIMITER = "\n"
 print_lock = Lock()
+bill_cycle = 1
 
 def main():
     start_server()
@@ -56,31 +57,41 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
     :param port: the port of the connection
     :param max_buffer_size: the max buffer size set to 5120
     """
+
+    global bill_cycle
     sm_num = receive_input(connection, max_buffer_size)
     sm_num = int(sm_num[0])
+    print_lock.acquire()
     eu.set_num_sm(int(sm_num))
+    print_lock.release()
     is_active = True
-
+    counter = 1
     while is_active:
         # receive the input from the aggregators and process it in the utility company object
         client_input = receive_input(connection, max_buffer_size)
-        print("receiving...", client_input)
+        counter += 1
+
+        # print("receiving...", client_input)
         if client_input:
             num_aggs = int(client_input[0])
             sm_id = int(client_input[1])
             bill_boolean = int(client_input[2])
 
-            if bill_boolean == 1:
-                print("bill amount:", int(client_input[3]))
-                eu.generate_bill(sm_id, int(client_input[3]))
-                break
-            else:
-                value = int(client_input[3])
-                eu.set_num_aggs(int(num_aggs))
-                print_lock.acquire()
-                eu.set_spatial_sum(value)
-                print(eu.get_spatial_sum())
-                print_lock.release()
+            # if counter == eu.get_num_aggs():
+            #     print("bill amount:", int(client_input[3]))
+            #     print_lock.acquire()
+            #     eu.generate_bill(sm_id, int(client_input[3]))
+            #     print_lock.release()
+            #     is_active = False
+            # else:
+            value = int(client_input[3])
+            print_lock.acquire()
+            eu.set_num_aggs(int(num_aggs))
+            eu.set_spatial_sum(value)
+            print(eu.get_spatial_sum())
+
+            print_lock.release()
+
 
 def receive_input(connection, max_buffer_size):
     """

@@ -3,13 +3,14 @@ __author__ = "Claire Casalnova"
 import socket
 import sys
 import traceback
+import time
 from Aggregator import Aggregator
 from numpy import long
 from threading import Thread
 
 # delimiter variable for sending data in chunks
 DELIMITER = "\n"
-
+bill_cycle = 1
 
 def start_server(connections, eu_conn):
     # set up connection to the smart meters
@@ -23,12 +24,15 @@ def start_server(connections, eu_conn):
     num_smart_meters = str(num_smart_meters)
     num_smart_meters += DELIMITER
     eu_conn.sendall(num_smart_meters.encode("utf-8"))
+
+
     ID = int(sys.argv[2])
     print(sys.argv[1], " ", sys.argv[2])
     aggregator = Aggregator(ID, int(num_smart_meters))
 
-    while True:
-        # while len(connections) < int(num_smart_meters):
+
+    # while True:
+    while len(connections) < int(num_smart_meters):
         s.listen()
         conn, addr = s.accept()
         print('Connected to :', addr[0], ':', addr[1])
@@ -51,6 +55,7 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
     :param eu_conn: the connection the utility company
     :param max_buffer_size: the max size of the buffer set to 5120
     """
+    global bill_cycle
     sm_id = receive_input(connection, max_buffer_size)
     time_length = int(receive_input(connection, max_buffer_size))
     agg_num = int(receive_input(connection, max_buffer_size))
@@ -59,14 +64,15 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
     aggregator.calculate_lagrange_multiplier(int(agg_num))
     is_active = True
     shares = True
-    counter = 0
+
     while is_active:
         meter_id = int(sm_id)
         meter_id = str(meter_id) + DELIMITER
         meter_id = int(meter_id.strip(DELIMITER))
-
+        counter = 0
         is_active = False
         while shares:
+
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 print("Processed share: {}".format(client_input))
@@ -74,10 +80,9 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                 aggregator.update_spatial_counter(int(client_input))
                 constant = long(aggregator.get_spatial_total()) * long(aggregator.get_lagrange_multiplier())
                 aggregator.calc_sum(constant)
-
             else:
                 # Send final spatial info to the electrical utility company
-                connection.close()
+                #
                 print("Connection " + str(ip) + ":" + str(port) + " closed")
                 sending_string = str(agg_num) + DELIMITER
                 sending_string += str(meter_id) + DELIMITER
@@ -85,25 +90,23 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                 val = aggregator.calculate_delta()
                 val = str(val) + DELIMITER
                 sending_string += val
-                sending_string += "done\n"
                 eu_conn.sendall(sending_string.encode("utf-8"))
                 aggregator.reset_spatial()
                 counter += 1
                 print(counter)
+                print(bill_cycle)
+                if bill_cycle % agg_num == 0:
+                    aggregator.get_billing_amount(aggregator.get_ID())
+                    print("pls work")
+                    bill_cycle = 1
+                    connection.close()
 
-                # if end of the time cycle send the billing data
-                if counter >= time_length:
-                    shares = False
-                    sending_string = str(agg_num) + DELIMITER
-                    sending_string += str(meter_id) + DELIMITER
-                    sending_string += str(1) + DELIMITER
-                    sending_string += str(aggregator.get_billing_amount(agg_num)) + DELIMITER
-                    sending_string += "done\n"
-                    eu_conn.sendall(sending_string.encode("utf-8"))
-                    break
+                else:
+                    bill_cycle += 1
 
 
-        # eu_conn.sendall("generate".encode("utf-8"))
+    print("here")
+
 
 
 def receive_input(connection, max_buffer_size):
