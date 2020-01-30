@@ -11,6 +11,7 @@ from threading import Thread
 DELIMITER = "\n"
 bill_cycle = 1
 
+
 def start_server(connections, eu_conn):
     # set up connection to the smart meters
     TCP_IP = '127.0.0.1'
@@ -40,10 +41,7 @@ def start_server(connections, eu_conn):
         try:
             t = Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn))
             threads.append(t)
-            print(len(threads))
-            print(t)
             t.start()
-            # t.join()
         except:
             print("Thread did not start.")
             traceback.print_exc()

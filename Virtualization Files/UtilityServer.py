@@ -9,7 +9,7 @@ from threading import Thread,Lock
 
 DELIMITER = "\n"
 print_lock = Lock()
-bill_cycle = 1
+print_cycle = 1
 
 def main():
     start_server()
@@ -58,7 +58,7 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
     :param max_buffer_size: the max buffer size set to 5120
     """
 
-    global bill_cycle
+    global print_cycle
     sm_num = receive_input(connection, max_buffer_size)
     sm_num = int(sm_num[0])
     print_lock.acquire()
@@ -88,8 +88,11 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
             print_lock.acquire()
             eu.set_num_aggs(int(num_aggs))
             eu.set_spatial_sum(value)
-            print(eu.get_spatial_sum())
-
+            if print_cycle % num_aggs == 0:
+                print(eu.get_spatial_sum())
+                print_cycle = 1
+            else:
+                print_cycle += 1
             print_lock.release()
 
 
