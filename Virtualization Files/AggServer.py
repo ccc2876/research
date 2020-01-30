@@ -3,7 +3,6 @@ __author__ = "Claire Casalnova"
 import socket
 import sys
 import traceback
-import time
 from Aggregator import Aggregator
 from numpy import long
 from threading import Thread
@@ -30,7 +29,7 @@ def start_server(connections, eu_conn):
     print(sys.argv[1], " ", sys.argv[2])
     aggregator = Aggregator(ID, int(num_smart_meters))
 
-
+    threads = []
     # while True:
     while len(connections) < int(num_smart_meters):
         s.listen()
@@ -39,7 +38,12 @@ def start_server(connections, eu_conn):
         connections.append(conn)
         conn.sendall(str(aggregator.get_ID()).encode("utf-8"))
         try:
-            Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn)).start()
+            t = Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn))
+            threads.append(t)
+            print(len(threads))
+            print(t)
+            t.start()
+            # t.join()
         except:
             print("Thread did not start.")
             traceback.print_exc()
@@ -72,7 +76,6 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
         counter = 0
         is_active = False
         while shares:
-
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 print("Processed share: {}".format(client_input))
@@ -82,8 +85,8 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                 aggregator.calc_sum(constant)
             else:
                 # Send final spatial info to the electrical utility company
-                #
-                print("Connection " + str(ip) + ":" + str(port) + " closed")
+                shares = False
+                # print("Connection " + str(ip) + ":" + str(port) + " closed")
                 sending_string = str(agg_num) + DELIMITER
                 sending_string += str(meter_id) + DELIMITER
                 sending_string += str(0) + DELIMITER
@@ -99,11 +102,10 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                     aggregator.get_billing_amount(aggregator.get_ID())
                     print("pls work")
                     bill_cycle = 1
-                    connection.close()
-
                 else:
                     bill_cycle += 1
-
+    print(connection)
+    connection.close()
 
     print("here")
 
@@ -149,8 +151,6 @@ def main():
 
     # start the set up and then close connections when finished
     start_server(connections, soc)
-    for conn in connections:
-        conn.close()
 
 
 if __name__ == "__main__":
