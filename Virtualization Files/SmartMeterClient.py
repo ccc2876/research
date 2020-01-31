@@ -17,7 +17,7 @@ def main():
     max_time_consumption = 10
     max_coefficient = 4
     max_agg_id = 3
-    num_time_instances = 2
+    num_time_instances = 5
     max_total_consumption = num_time_instances * max_time_consumption
     zp_space = max_total_consumption * num_time_instances
 
