@@ -20,7 +20,7 @@ def start_server(connections, eu_conn):
     s.bind((TCP_IP, TCP_PORT))
 
     # sets up the number of smart meters that will be in the network and sends this data to utility company
-    num_smart_meters = 3
+    num_smart_meters = 2
     num_smart_meters = str(num_smart_meters)
     num_smart_meters += DELIMITER
     eu_conn.sendall(num_smart_meters.encode("utf-8"))
@@ -39,7 +39,7 @@ def start_server(connections, eu_conn):
         connections.append(conn)
         conn.sendall(str(aggregator.get_ID()).encode("utf-8"))
         try:
-            t = Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn))
+            t = Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn, num_smart_meters))
             threads.append(t)
             t.start()
         except:
@@ -47,7 +47,7 @@ def start_server(connections, eu_conn):
             traceback.print_exc()
 
 
-def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120):
+def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_size=5120):
     """
     runs a thread for each connection to a smart meter
     :param connection: the connection
@@ -84,7 +84,6 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
             else:
                 # Send final spatial info to the electrical utility company
                 shares = False
-                # print("Connection " + str(ip) + ":" + str(port) + " closed")
                 sending_string = str(agg_num) + DELIMITER
                 sending_string += str(meter_id) + DELIMITER
                 sending_string += str(0) + DELIMITER
@@ -94,18 +93,19 @@ def clientThread(connection, aggregator, ip, port, eu_conn, max_buffer_size=5120
                 eu_conn.sendall(sending_string.encode("utf-8"))
                 aggregator.reset_spatial()
                 counter += 1
-                print(counter)
-                print(bill_cycle)
-                if bill_cycle % agg_num == 0:
-                    aggregator.get_billing_amount(aggregator.get_ID())
-                    print("pls work")
-                    bill_cycle = 1
-                else:
-                    bill_cycle += 1
-    print(connection)
+                # print("bill cycle:", bill_cycle)
+                # if bill_cycle % int(num_sm) == 0:
+                #     print("here")
+                #     amount = aggregator.get_billing_amount(meter_id)
+                #     sending_string = str(agg_num) + DELIMITER
+                #     sending_string += str(meter_id) + DELIMITER
+                #     sending_string += str(1) + DELIMITER
+                #     sending_string += str(amount)
+                #     eu_conn.sendall(str(sending_string).encode("utf-8"))
+                #     bill_cycle = 1
+                # else:
+                #     bill_cycle += 1
     connection.close()
-
-    print("here")
 
 
 

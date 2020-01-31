@@ -9,5 +9,5 @@ if __name__ == '__main__':
     print("Smart Meter 2")
     subprocess.call("python SmartMeterClient.py 2", shell=True)
     time.sleep(1)
-    print("Smart Meter 3")
-    subprocess.call("python SmartMeterClient.py 3", shell=True)
+    # print("Smart Meter 3")
+    # subprocess.call("python SmartMeterClient.py 3", shell=True)

@@ -17,8 +17,9 @@ class Aggregator:
         self.ID = ID
         self.billing_dict = dict()
         self.num_sm = num_smart_meters
-        for i in range(1,num_smart_meters+1):
+        for i in range(1, num_smart_meters+1):
             self.billing_dict[i] = 0
+        print(self.billing_dict)
         self.spatial_counter = 0
 
         self.bill_results = [0] * num_smart_meters

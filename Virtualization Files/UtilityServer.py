@@ -10,6 +10,7 @@ from threading import Thread,Lock
 DELIMITER = "\n"
 print_lock = Lock()
 print_cycle = 1
+num_aggs = 3
 
 def main():
     start_server()
@@ -35,17 +36,23 @@ def start_server():
     soc.listen(6)  # queue up to 6 requests
     print("Socket now listening")
 
-    while True:
+    while len(connections) < num_aggs:
         connection, address = soc.accept()
         connections.append(connection)
         eu.set_num_aggs(len(connections))
         ip, port = str(address[0]), str(address[1])
         print("Connected with " + ip + ":" + port)
+        threads= []
         try:
-            Thread(target=clientThread, args=(connection,eu, ip, port)).start()
+            t = Thread(target=clientThread, args=(connection,eu, ip, port))
+            threads.append(t)
+            t.start()
+
         except:
             print("Thread did not start.")
             traceback.print_exc()
+
+
 
 
 def clientThread(connection, eu, ip, port, max_buffer_size=5120):
@@ -72,29 +79,36 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
         counter += 1
 
         # print("receiving...", client_input)
-        if client_input:
-            num_aggs = int(client_input[0])
+        if client_input != ['']:
+            print(client_input)
+            num_aggs_input = int(client_input[0])
             sm_id = int(client_input[1])
             bill_boolean = int(client_input[2])
-
-            # if counter == eu.get_num_aggs():
-            #     print("bill amount:", int(client_input[3]))
-            #     print_lock.acquire()
-            #     eu.generate_bill(sm_id, int(client_input[3]))
-            #     print_lock.release()
-            #     is_active = False
-            # else:
             value = int(client_input[3])
             print_lock.acquire()
-            eu.set_num_aggs(int(num_aggs))
+            eu.set_num_aggs(int(num_aggs_input))
             eu.set_spatial_sum(value)
+            eu.generate_bill(sm_id, value)
+            print_lock.release()
+            # if bill_boolean == 1:
+            #     print("here")
+            #     is_active = False
+            #     for i in range(0, len(eu.get_bills())):
+            #         print_lock.acquire()
+            #         eu.get_total_amount()
+            #         print("Bill for Smart Meter #", i, ": ", eu.bills[i])
+            #         print_lock.release()
+        else:
             if print_cycle % num_aggs == 0:
+                print_lock.acquire()
                 print(eu.get_spatial_sum())
                 print_cycle = 1
+                print_lock.release()
+                is_active= False
             else:
                 print_cycle += 1
-            print_lock.release()
 
+    eu.get_total_amount()
 
 def receive_input(connection, max_buffer_size):
     """
