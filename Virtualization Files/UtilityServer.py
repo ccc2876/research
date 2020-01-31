@@ -80,11 +80,9 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
 
         # print("receiving...", client_input)
         if client_input != ['']:
-            print(client_input)
             num_aggs_input = int(client_input[0])
             sm_id = int(client_input[1])
-            bill_boolean = int(client_input[2])
-            value = int(client_input[3])
+            value = int(client_input[2])
             print_lock.acquire()
             eu.set_num_aggs(int(num_aggs_input))
             eu.set_spatial_sum(value)
@@ -103,12 +101,19 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
                 print_lock.acquire()
                 print(eu.get_spatial_sum())
                 print_cycle = 1
+                is_active = False
                 print_lock.release()
-                is_active= False
-            else:
-                print_cycle += 1
 
+            else:
+                print_lock.acquire()
+                print_cycle += 1
+                print_lock.release()
+
+    print_lock.acquire()
+    print("totals")
     eu.get_total_amount()
+    print(eu.get_bills())
+    print_lock.release()
 
 def receive_input(connection, max_buffer_size):
     """

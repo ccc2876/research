@@ -54,7 +54,7 @@ class Aggregator:
         print("billing amount", amount)
         return int(amount)
 
-    def calculate_delta(self):
+    def calculate_delta(self,zp=0):
         return int(self.spatial_counter * self.delta_func_multiplier)
 
     def set_lagrange(self, equation):

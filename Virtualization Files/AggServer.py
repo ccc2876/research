@@ -86,7 +86,6 @@ def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_s
                 shares = False
                 sending_string = str(agg_num) + DELIMITER
                 sending_string += str(meter_id) + DELIMITER
-                sending_string += str(0) + DELIMITER
                 val = aggregator.calculate_delta()
                 val = str(val) + DELIMITER
                 sending_string += val

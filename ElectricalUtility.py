@@ -29,7 +29,6 @@ class ElectricalUtility:
 
     def generate_bill(self, smart_meter, amount):
         self.bills[smart_meter-1] += amount
-        print(self.bills)
 
 
 
