@@ -42,6 +42,9 @@ def start_server(connections, eu_conn):
             t = Thread(target=clientThread, args=(conn, aggregator, TCP_IP, TCP_PORT, eu_conn, num_smart_meters))
             threads.append(t)
             t.start()
+
+
+
         except:
             print("Thread did not start.")
             traceback.print_exc()

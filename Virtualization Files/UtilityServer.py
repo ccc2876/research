@@ -11,17 +11,40 @@ DELIMITER = "\n"
 print_lock = Lock()
 print_cycle = 1
 num_aggs = 3
+threads =[]
+finished = False
+
 
 def main():
-    start_server()
+    global finished
+    eu = ElectricalUtility()
+    start_server(eu)
+    while not finished:
+        for x in threads:
+            if not x.is_alive():
+                finished = True
+            else:
+                finished = False
+    if finished:
+        billing(eu)
 
 
-def start_server():
+
+def billing(eu):
+    print_lock.acquire()
+    eu.get_total_amount()
+
+    bills = eu.get_bills()
+    for i in range(0, len(bills)):
+        print("Bill amount for SM #", i+1, ": ", bills[i])
+
+    print_lock.release()
+
+def start_server(eu):
     """
     set up the connection to each of the aggregators
     start a thread for each connection
     """
-    eu = ElectricalUtility()
     connections = []
     host = "127.0.0.1"
     port = 8000  # arbitrary non-privileged port
@@ -42,7 +65,6 @@ def start_server():
         eu.set_num_aggs(len(connections))
         ip, port = str(address[0]), str(address[1])
         print("Connected with " + ip + ":" + port)
-        threads= []
         try:
             t = Thread(target=clientThread, args=(connection,eu, ip, port))
             threads.append(t)
@@ -51,7 +73,6 @@ def start_server():
         except:
             print("Thread did not start.")
             traceback.print_exc()
-
 
 
 
@@ -78,7 +99,6 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
         client_input = receive_input(connection, max_buffer_size)
         counter += 1
 
-        # print("receiving...", client_input)
         if client_input != ['']:
             num_aggs_input = int(client_input[0])
             sm_id = int(client_input[1])
@@ -88,14 +108,6 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
             eu.set_spatial_sum(value)
             eu.generate_bill(sm_id, value)
             print_lock.release()
-            # if bill_boolean == 1:
-            #     print("here")
-            #     is_active = False
-            #     for i in range(0, len(eu.get_bills())):
-            #         print_lock.acquire()
-            #         eu.get_total_amount()
-            #         print("Bill for Smart Meter #", i, ": ", eu.bills[i])
-            #         print_lock.release()
         else:
             if print_cycle % num_aggs == 0:
                 print_lock.acquire()
@@ -109,11 +121,7 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
                 print_cycle += 1
                 print_lock.release()
 
-    print_lock.acquire()
-    print("totals")
-    eu.get_total_amount()
-    print(eu.get_bills())
-    print_lock.release()
+
 
 def receive_input(connection, max_buffer_size):
     """
