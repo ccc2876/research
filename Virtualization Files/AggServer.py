@@ -43,8 +43,6 @@ def start_server(connections, eu_conn):
             threads.append(t)
             t.start()
 
-
-
         except:
             print("Thread did not start.")
             traceback.print_exc()

@@ -122,7 +122,6 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
                 print_lock.release()
 
 
-
 def receive_input(connection, max_buffer_size):
     """
     function for receiving and decoding input from the smart meters

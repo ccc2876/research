@@ -4,6 +4,7 @@ import socket
 import sys
 import random
 import time
+from sympy import isprime
 from SmartMeter import SmartMeter
 
 
@@ -16,9 +17,15 @@ def main():
     max_time_consumption = 10
     max_coefficient = 4
     max_agg_id = 3
-    num_time_instances = 1
+    num_time_instances = 2
     max_total_consumption = num_time_instances * max_time_consumption
-    zp_space = max_total_consumption * 100
+    zp_space = max_total_consumption * num_time_instances
+
+    zp = zp_space + 1
+    while not isprime(zp):
+        zp += 1
+    print(zp)
+
 
     # set up the smart meter object
     sm = SmartMeter()
