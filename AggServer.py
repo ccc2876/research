@@ -6,14 +6,15 @@ import traceback
 import time
 from Aggregator import Aggregator
 from numpy import long
-from threading import Thread
+from threading import Thread, Lock
 
 # delimiter variable for sending data in chunks
 DELIMITER = "\n"
 bill_cycle = 1
 end = 0
 start = 0
-num_smart_meters = 2
+num_smart_meters = 5
+lock =Lock()
 
 f = None
 
@@ -86,20 +87,25 @@ def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_s
             client_input = receive_input(connection, max_buffer_size)
             if client_input:
                 print("Processed share: {}".format(client_input))
+                lock.acquire()
                 aggregator.update_billing_counters(int(client_input), meter_id)
                 aggregator.update_spatial_counter(int(client_input))
                 constant = long(aggregator.get_spatial_total()) * long(aggregator.get_lagrange_multiplier())
                 aggregator.calc_sum(constant)
+                lock.release()
             else:
                 # Send final spatial info to the electrical utility company
                 shares = False
                 sending_string = str(agg_num) + DELIMITER
                 sending_string += str(meter_id) + DELIMITER
+                lock.acquire()
                 val = aggregator.calculate_delta()
                 val = str(val) + DELIMITER
                 sending_string += val
                 eu_conn.sendall(sending_string.encode("utf-8"))
+                time.sleep(0.5)
                 aggregator.reset_spatial()
+                lock.release()
                 counter += 1
     end = time.time()
     print(end)

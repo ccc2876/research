@@ -19,7 +19,7 @@ def main():
     max_time_consumption = 10
     max_coefficient = 4
     max_agg_id = 2
-    num_time_instances = 10
+    num_time_instances = 2
     max_total_consumption = num_time_instances * max_time_consumption
     zp_space = max_total_consumption * num_time_instances
 
@@ -32,6 +32,7 @@ def main():
     # set up the smart meter object
     sm = SmartMeter()
     sm.set_id(int(sys.argv[1]))
+    print(sys.argv[1])
     sm.set_zp_space(zp_space)
 
     for i in range(0, NUM_AGGS):
@@ -85,9 +86,10 @@ def main():
             single_share_time_start = time.time()
             val = sm.create_shares(agg_id)
             shares.append(val)
-            val = val % zp_space
+            val = val
             print("sending val:", val)
             conn.sendall(str(val).encode("utf8"))
+            time.sleep(1)
             single_share_time_end = time.time()
             sm.add_time(single_share_time_end - single_share_time_start)
             print(single_share_time_end - single_share_time_start)

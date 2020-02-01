@@ -5,12 +5,14 @@ import sys
 import traceback
 from ElectricalUtility import ElectricalUtility
 from threading import Thread,Lock
+import time
 
 
 DELIMITER = "\n"
 print_lock = Lock()
 print_cycle = 1
 num_aggs = 2
+num_sm = 5
 threads =[]
 finished = False
 
@@ -18,6 +20,7 @@ finished = False
 def main():
     global finished
     eu = ElectricalUtility()
+    eu.set_num_sm(int(num_sm))
     start_server(eu)
     while not finished:
         for x in threads:
@@ -56,7 +59,7 @@ def start_server(eu):
     except:
         print("Bind failed. Error : " + str(sys.exc_info()))
         sys.exit()
-    soc.listen(6)  # queue up to 6 requests
+    soc.listen()  # queue up to 6 requests
     print("Socket now listening")
 
     while len(connections) < num_aggs:
@@ -89,9 +92,6 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
     global print_cycle
     sm_num = receive_input(connection, max_buffer_size)
     sm_num = int(sm_num[0])
-    print_lock.acquire()
-    eu.set_num_sm(int(sm_num))
-    print_lock.release()
     is_active = True
     counter = 1
     while is_active:
@@ -100,13 +100,15 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
         counter += 1
 
         if client_input != ['']:
+            print_lock.acquire()
             num_aggs_input = int(client_input[0])
             sm_id = int(client_input[1])
             value = int(client_input[2])
-            print_lock.acquire()
             eu.set_num_aggs(int(num_aggs_input))
             eu.set_spatial_sum(value)
             eu.generate_bill(sm_id, value)
+
+            time.sleep(1)
             print_lock.release()
         else:
             if print_cycle % num_aggs == 0:
