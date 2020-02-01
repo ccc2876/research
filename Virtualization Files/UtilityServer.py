@@ -10,7 +10,7 @@ from threading import Thread,Lock
 DELIMITER = "\n"
 print_lock = Lock()
 print_cycle = 1
-num_aggs = 3
+num_aggs = 2
 threads =[]
 finished = False
 
@@ -111,7 +111,6 @@ def clientThread(connection, eu, ip, port, max_buffer_size=5120):
         else:
             if print_cycle % num_aggs == 0:
                 print_lock.acquire()
-                print(eu.get_spatial_sum())
                 print_cycle = 1
                 is_active = False
                 print_lock.release()

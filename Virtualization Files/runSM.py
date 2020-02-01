@@ -2,7 +2,6 @@ import subprocess
 import time
 import sympy
 
-
 if __name__ == '__main__':
     print("Smart Meter 1")
     subprocess.call("python SmartMeterClient.py 1", shell=True)
@@ -10,5 +9,26 @@ if __name__ == '__main__':
     print("Smart Meter 2")
     subprocess.call("python SmartMeterClient.py 2", shell=True)
     time.sleep(1)
-    # print("Smart Meter 3")
-    # subprocess.call("python SmartMeterClient.py 3", shell=True)
+    print("Smart Meter 3")
+    subprocess.call("python SmartMeterClient.py 3", shell=True)
+    time.sleep(1)
+    print("Smart Meter 4")
+    subprocess.call("python SmartMeterClient.py 4", shell=True)
+    time.sleep(1)
+    print("Smart Meter 5")
+    subprocess.call("python SmartMeterClient.py 5", shell=True)
+    time.sleep(1)
+    print("Smart Meter 6")
+    subprocess.call("python SmartMeterClient.py 6", shell=True)
+    time.sleep(1)
+    print("Smart Meter 7")
+    subprocess.call("python SmartMeterClient.py 7", shell=True)
+    time.sleep(1)
+    print("Smart Meter 8")
+    subprocess.call("python SmartMeterClient.py 8", shell=True)
+    time.sleep(1)
+    print("Smart Meter 9")
+    subprocess.call("python SmartMeterClient.py 9", shell=True)
+    time.sleep(1)
+    print("Smart Meter 10")
+    subprocess.call("python SmartMeterClient.py 10", shell=True)

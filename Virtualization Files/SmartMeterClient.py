@@ -7,17 +7,18 @@ import time
 from sympy import isprime
 from SmartMeter import SmartMeter
 
+NUM_AGGS = 2
 
 def main():
 
     # set up preprocess information
     aggregator_IDs = []
     connections = []
-    num_aggs = 3
+
     max_time_consumption = 10
     max_coefficient = 4
-    max_agg_id = 3
-    num_time_instances = 5
+    max_agg_id = 2
+    num_time_instances = 10
     max_total_consumption = num_time_instances * max_time_consumption
     zp_space = max_total_consumption * num_time_instances
 
@@ -32,7 +33,7 @@ def main():
     sm.set_id(int(sys.argv[1]))
     sm.set_zp_space(zp_space)
 
-    for i in range(0, num_aggs):
+    for i in range(0, NUM_AGGS):
         soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         connections.append(soc)
     host = "127.0.0.1"

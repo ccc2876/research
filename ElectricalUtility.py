@@ -56,18 +56,3 @@ class ElectricalUtility:
 
     def get_bills(self):
         return self.bills
-
-    def add_sums(self, x):
-        """
-        append the reading to the correct location in the array
-        :param x: the reading from the aggregators
-        :param sm_id: the smart meter that the reading comes from
-        """
-        print("value:", self.value, "x:", x)
-        self.value += x
-
-    def return_values(self):
-        """
-        prints the list of values
-        """
-        return self.value

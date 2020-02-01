@@ -10,9 +10,13 @@ from threading import Thread
 # delimiter variable for sending data in chunks
 DELIMITER = "\n"
 bill_cycle = 1
+end = 0
+start = 0
+num_smart_meters = 2
 
 
 def start_server(connections, eu_conn):
+    global num_smart_meters
     # set up connection to the smart meters
     TCP_IP = '127.0.0.1'
     TCP_PORT = int(sys.argv[1])
@@ -20,7 +24,7 @@ def start_server(connections, eu_conn):
     s.bind((TCP_IP, TCP_PORT))
 
     # sets up the number of smart meters that will be in the network and sends this data to utility company
-    num_smart_meters = 2
+
     num_smart_meters = str(num_smart_meters)
     num_smart_meters += DELIMITER
     eu_conn.sendall(num_smart_meters.encode("utf-8"))
@@ -58,7 +62,7 @@ def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_s
     :param eu_conn: the connection the utility company
     :param max_buffer_size: the max size of the buffer set to 5120
     """
-    global bill_cycle
+    global bill_cycle, end, start
     sm_id = receive_input(connection, max_buffer_size)
     time_length = int(receive_input(connection, max_buffer_size))
     agg_num = int(receive_input(connection, max_buffer_size))
@@ -93,18 +97,7 @@ def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_s
                 eu_conn.sendall(sending_string.encode("utf-8"))
                 aggregator.reset_spatial()
                 counter += 1
-                # print("bill cycle:", bill_cycle)
-                # if bill_cycle % int(num_sm) == 0:
-                #     print("here")
-                #     amount = aggregator.get_billing_amount(meter_id)
-                #     sending_string = str(agg_num) + DELIMITER
-                #     sending_string += str(meter_id) + DELIMITER
-                #     sending_string += str(1) + DELIMITER
-                #     sending_string += str(amount)
-                #     eu_conn.sendall(str(sending_string).encode("utf-8"))
-                #     bill_cycle = 1
-                # else:
-                #     bill_cycle += 1
+
     connection.close()
 
 
