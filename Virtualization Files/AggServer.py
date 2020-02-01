@@ -3,6 +3,7 @@ __author__ = "Claire Casalnova"
 import socket
 import sys
 import traceback
+import time
 from Aggregator import Aggregator
 from numpy import long
 from threading import Thread
@@ -14,9 +15,11 @@ end = 0
 start = 0
 num_smart_meters = 2
 
+f = None
+
 
 def start_server(connections, eu_conn):
-    global num_smart_meters
+    global num_smart_meters, f
     # set up connection to the smart meters
     TCP_IP = '127.0.0.1'
     TCP_PORT = int(sys.argv[1])
@@ -28,8 +31,8 @@ def start_server(connections, eu_conn):
     num_smart_meters = str(num_smart_meters)
     num_smart_meters += DELIMITER
     eu_conn.sendall(num_smart_meters.encode("utf-8"))
-
-
+    name = "agg" + sys.argv[2] + "_time.txt"
+    f = open(name, "w")
     ID = int(sys.argv[2])
     print(sys.argv[1], " ", sys.argv[2])
     aggregator = Aggregator(ID, int(num_smart_meters))
@@ -71,7 +74,8 @@ def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_s
     aggregator.calculate_lagrange_multiplier(int(agg_num))
     is_active = True
     shares = True
-
+    start = time.time()
+    print(start)
     while is_active:
         meter_id = int(sm_id)
         meter_id = str(meter_id) + DELIMITER
@@ -97,9 +101,11 @@ def clientThread(connection, aggregator, ip, port, eu_conn, num_sm, max_buffer_s
                 eu_conn.sendall(sending_string.encode("utf-8"))
                 aggregator.reset_spatial()
                 counter += 1
-
+    end = time.time()
+    print(end)
+    aggregator.time = end-start
+    print(aggregator.time)
     connection.close()
-
 
 
 def receive_input(connection, max_buffer_size):
@@ -146,3 +152,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+    f.write(str(end - start) + "\n")
+    f.close()

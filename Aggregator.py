@@ -29,6 +29,7 @@ class Aggregator:
         self.delta_func_multiplier = 0
         self.lagrange = ""
         self.sumofshares= 0
+        self.time = 0
 
     def update_billing_counters(self,value,meter_id):
         self.billing_dict[meter_id] = value

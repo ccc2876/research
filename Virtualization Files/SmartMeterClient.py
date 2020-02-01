@@ -8,6 +8,7 @@ from sympy import isprime
 from SmartMeter import SmartMeter
 
 NUM_AGGS = 2
+f = open("sm_time.txt","w")
 
 def main():
 
@@ -90,9 +91,11 @@ def main():
             single_share_time_end = time.time()
             sm.add_time(single_share_time_end - single_share_time_start)
             print(single_share_time_end - single_share_time_start)
+            f.write(str(single_share_time_end - single_share_time_start)+"\n")
         counter += 1
     print(sum(secrets))
 
 
 if __name__ == "__main__":
     main()
+    f.close()
