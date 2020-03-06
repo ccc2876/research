@@ -1,139 +1,221 @@
 import random
+import socket
+import sys
+import traceback
+import time
+from numpy import long
+from queue import Queue
+from threading import Thread, Lock
+from memory_profiler import profile
 
 
-class SmartMeter:
+#global variables
+g = -1 
+n = -1
+total_count = 0 # total count of readings
+num_sm = 5 #number of smart meters in the network
+total_readings = 1 #total reading values
+time_instances = 1 #number of time instances
+server_done = False
+
+lock = Lock()
+
+
+def get_readings():
+	"""
+	gets the random number value reading as the consumption
+	"""
+    read = random.randint(1, 10)
+    print("Read", int(read))
+    return read
+
+
+@profile #this is how the program determines the memory usage
+def encrypt(read):
+	"""
+	homomorphic encryption algorithm
+	"""
+    global g, n
+    start =time.perf_counter()
+    r = random.randint(1, g)
+    encrypted_val = ((g ** read) * (r ** n)) % (n ** 2)
+    end = time.perf_counter()
+    print(end-start)
+    print("e", encrypted_val)
+    return encrypted_val
+
+
+def receive_input(connection, max_buffer_size=5120):
     """
-    attributes for Smart Meter class
-    ID -- the ID that corresponds to each smart meter
-    degree -- the number of aggregators -1, corresponds to degree of polynomial
-    secret -- the secret that the smart meter has, updated at each time instance
-    polynomial -- the randomly generated polynomial for creating shares
-    coeff_list -- the randomly generated coefficients  used to create the polynomial
-    shares_list -- holds the shares that this smart meter created
+    function for receiving and decoding input from the smart meters
+    :param connection: the connection the smart meter
+    :param max_buffer_size: the max buffer size of receiving input
+    :return: the decoded input
     """
+    client_input = connection.recv(max_buffer_size)
+    client_input_size = sys.getsizeof(client_input)
+    if client_input_size > max_buffer_size:
+        print("The input size is greater than expected {}".format(client_input_size))
+    decoded_input = client_input.decode("utf8").rstrip()
+    print("Dec", decoded_input)
+    return decoded_input
 
-    def __init__(self):
-        self.ID = 0
-        self.degree = 0
-        self.secret = 0
-        self.polynomial = ""
-        self.coeff_list = []
-        self.shares_list = []
-        self.times_list = []
 
-    def set_id(self, ID):
-        """
-        set the ID var
-        :param ID: the ID of the smart meter
-        """
-        self.ID = ID
+def setup_client(host, port):
+	"""
+	sets up each smart meter as a client
+	"""
+    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    print("host", host)
+    print("port", port)
+    print(soc)
 
-    def set_degree(self, deg):
-        """
-        set the degree variable
-        :param deg: the degree of the polynomial
-        """
-        self.degree = deg
+    try:
+        soc.connect((host, int(port)))
+        port += 1
+    except:
+        print("Connection Error")
+        sys.exit()
+    return soc
 
-    def set_polynomial(self, poly):
-        """
-        was used for testing of a predetermined polynomial
-        :param poly:  the set polynomial of the smart meter
-        """
-        self.polynomial = poly
 
-    def set_coeff_list(self, coeff_list):
-        """
-        was used for testing of a predetermined polynomial
-        :param coeff_list: the coefficients of the polynomial
-        """
+def server_client_func(soc):
+	"""
+	sets up the special smart meter as the server to the other smart meters and a client to the electrical utility company
+	"""
+    global n, g
+    inp = receive_input(soc)
+    values = inp.split(" ")
+    n = int(values[0])
+    g = int(values[1])
+    print("pub", n, g)
+    public_key = str(n) + " " + str(g)
+    return public_key
 
-        self.coeff_list = coeff_list
 
-    def get_ID(self):
-        """
-        :return:  the ID of this smart meter
-        """
-        return self.ID
+def only_client_func(soc):
+	"""
+	for smart meters that do not interact with utility company
+	gets the publi key from the server
+	for each time instance the smart meter gets a reading encrypts and sends to the special smart meter
+	"""
+    global n, g
 
-    def get_polynomial(self):
-        """
-        :return: the polynomial of this smart meter
-        """
-        return self.polynomial
+    inp = receive_input(soc)
+    values = inp.split(" ")
+    n = int(values[0])
+    g = int(values[1])
+    print("n", n)
+    print("g", g)
 
-    def set_secret(self, secret):
-        """
-        was used for a predetermined secret for testing purposes
-        :param secret: the secret of the smart meter
-        """
-        self.secret = secret
+    for i in range(0, time_instances):
+        read = get_readings()
+        encrypted_val = encrypt(read)
+        soc.sendall(str(encrypted_val).encode("utf-8"))
+		time.sleep(0.5)
 
-    def create_polynomial(self):
-        """
-        function to create a polynomial at each time instance for a smart meter
-        creates a random string of bits to determine the powers of x in the polynomial
-        then generates a random integer as the coefficient for the bits that are 1s
-        appends the secret to the end of the coefficient
-        """
-        self.coeff_list = []
-        bit_string = [1]
-        # loop over the range of the degree to generate whether the power of x will be present
-        for i in range(1, self.degree):
-            bit = random.randint(0, 1)
-            bit_string.append(bit)
-        power = self.degree
-        polystring = ""
 
-        # loop over the binary string and generate the coefficients
-        for i in range(0, len(bit_string)):
-            if bit_string[i] == 1:
-                coeff = random.randint(1, 10)
-                polystring += str(coeff) + "x^" + str(power) + "+"
-                self.coeff_list.append(coeff)
-            else:
-                self.coeff_list.append(0)
-            power -= 1
+def wait_on_values(soc, public_key, queue):
+	"""
+	the server smart meter waits to receive all the readings from all
+	the other smart meters before sending to the utility compnay
+	"""
+    global total_count, num_sm, total_readings, server_done
+    soc.sendall(str(public_key).encode("utf-8"))
 
-        # add the secret to the end of the polynomial as the constant
-        polystring += str(self.secret)
-        self.polynomial = polystring
-        print(self.polynomial)
+    if not server_done:
+        for i in range(0, time_instances):
+            read = get_readings()
+            lock.acquire()
+            total_readings *= int(encrypt(read))
+            server_done = True
+            total_count += 1
+            lock.release()
+    for i in range(0, time_instances):
+        lock.acquire()
+        total_readings *= int(receive_input(soc))
+        print("tr:", total_readings)
+        print("tc", total_count)
+        lock.release()
+        time.sleep(1)
 
-    def create_shares(self, aggregator_ID):
-        """
-        generates the shares from this smart meter
-        using the polynomial that belongs to this smart meter the ID value of the aggregator that is passed in
-        is plugged in for the x value and the share is the total of the polynomial
-        appends the share value to the aggregator list and to the smart meter list
-        :param aggregator: the aggregator that this share is being sent to
-        """
-        length = len(self.coeff_list)
-        power = self.degree
-        value = 0
-        for i in range(0, length):
-            value += self.coeff_list[i] * (aggregator_ID ** power)
-            power -= 1
-        value += self.secret
-        self.shares_list.append(value)
-        return value
 
-    def get_shares_list(self):
-        """
-        return the shares list as a string
-        :return: the list of shares
-        """
-        return str(self.shares_list)
+def send_final(soc, final):
+	"""
+	smart meter server sends final value to utility company
+	"""
+    print(final)
+    lock.acquire()
+    soc.sendall(str(final).encode("utf-8"))
+    lock.release()
 
-    def add_time(self, value):
-        """
-        append the length of time it took to send a share to the list
-        :param value: the time it took to send the share
-        """
-        self.times_list.append(value)
 
-    def get_time(self):
-        """
-        print the list of times
-        """
-        print(self.times_list)
+def setup_special_sm(host, port, is_server=1):
+	"""
+	calls functions to set up the server smart meter
+	"""
+    conn = setup_client(host, port)
+    public_key = server_client_func(conn)
+    start_server(public_key, conn)
+
+
+def start_server(public_key, conn):
+	"""
+	starts the smart meter server on the host ip
+	"""
+    global num_sm
+    # sets up server for connections to other smart meters
+    sm_connections = []
+    host = "129.21.67.150"  # will be VM ip
+    port = 8001  # make the id of smart meter + 8000
+    soc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    soc.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+    print("Socket created")
+    try:
+        soc.bind((host, port))
+    except:
+        print("Bind failed. Error : " + str(sys.exc_info()))
+        sys.exit()
+    soc.listen(num_sm)  # queue up to num sm request
+    print("Socket now listening on port ", port)
+    queue = Queue()
+
+    print("len", len(sm_connections))
+    print(num_sm - 1)
+    while len(sm_connections) <= (num_sm - 2): 
+        connection, address = soc.accept()
+        sm_connections.append(connection)
+        ip, port = str(address[0]), int(address[1])
+        print("Connected with " + ip + ":" + str(port))
+        port += 1
+        try:
+            t = Thread(target=wait_on_values, args=(connection, public_key, queue))
+            t.start()
+            t.join()
+        except:
+            print("Thread did not start.")
+            traceback.print_exc()
+
+    send_final(conn, int((total_readings % (n ** 2))))
+
+
+def main():
+	"""
+	runs the program
+	"""
+    global n, g
+
+    host = sys.argv[1]
+    port = int(sys.argv[2])
+    is_server = int(sys.argv[3])  # boolean flag for special smart meter
+    print(is_server)
+    if is_server:
+        setup_special_sm(host, port)
+    else:
+        conn = setup_client(host, port)
+        only_client_func(conn)
+        time.sleep(1)
+
+
+if __name__ == '__main__':
+    main()
